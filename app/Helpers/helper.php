@@ -1,0 +1,404 @@
+<?php
+
+use App\Models\Country;
+use App\Models\Option;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Ramsey\Uuid\Exception\DateTimeException;
+
+function log_info($txt = 'Log Info')
+{
+    Log::info($txt);
+}
+
+function log_error($txt = 'Log Error')
+{
+    Log::error($txt);
+}
+
+if (!function_exists('get_option')) {
+    function get_option(mixed $key)
+    {
+        if (is_array($key)) {
+            return Option::whereIn('key', $key)->pluck('value', 'key')->toArray();
+        } else {
+            $option = Option::where('key', $key)->first();
+            return $option?->value ?? null;
+        }
+    }
+}
+
+//image crop and resize====================================================>
+function image_resize($image, $image_save_path = 'uploads', $height = '250', $width = '320')
+{
+    $data = [
+        'name' => $image->getClientOriginalName(),
+        'tmp_name' => $image->getRealPath(),
+    ];
+    $image_save_path = storage_path('app/public/' . $image_save_path . '/');
+    try {
+        if ($data['name'] != "") {
+            $uploadedFile = $data['tmp_name'];
+            $sourceProperties = getimagesize($uploadedFile);
+            $tmpFileName = "tmp-" . rand(111, 999) . rand(111111, 999999) . time();
+            $thumbFileName = uniqid('IMG_');
+            $dirPath = $image_save_path;
+            $ext = pathinfo($data['name'], PATHINFO_EXTENSION);
+            $imageType = $sourceProperties[2];
+            try {
+                $exif = exif_read_data($uploadedFile);
+                if (!empty($exif['Orientation'])) {
+                    $orientation = $exif['Orientation'];
+                    $image = imagecreatefromstring(file_get_contents($uploadedFile));
+
+                    switch ($orientation) {
+                        case 3:
+                            $image = imagerotate($image, 180, 0);
+                            break;
+                        case 6:
+                            $image = imagerotate($image, -90, 0);
+                            break;
+                        case 8:
+                            $image = imagerotate($image, 90, 0);
+                            break;
+                    }
+                    switch ($imageType) {
+                        case IMAGETYPE_PNG:
+                            imagepng($image, $uploadedFile);
+                            break;
+                        case IMAGETYPE_JPEG:
+                            imagejpeg($image, $uploadedFile, 100);
+                            break;
+                        case IMAGETYPE_GIF:
+                            imagegif($image, $uploadedFile);
+                            break;
+                        case IMAGETYPE_WEBP:
+                            imagewebp($image, $uploadedFile, 100);
+                            break;
+                        case IMAGETYPE_AVIF:
+                            imageavif($image, $uploadedFile, 100);
+                            break;
+                        default:
+                            return false;
+                    }
+                    $sourceProperties = getimagesize($uploadedFile);
+                    imagedestroy($image);
+                }
+            } catch (\Throwable $th) {
+            }
+
+            $originalWidth = $sourceProperties[0];
+            $originalHeight = $sourceProperties[1];
+            $maxWidth = $width;
+            $maxHeight = $height;
+
+            if ($originalWidth < $maxWidth) {
+                $maxWidth = $originalWidth;
+            }
+            if ($originalHeight < $maxHeight) {
+                $maxHeight = $originalHeight;
+            }
+            if ($maxWidth == 0) {
+                $maxWidth = round(($originalWidth / $originalHeight) * $maxHeight, 0);
+            }
+            if ($maxHeight == 0) {
+                $maxHeight = round(($originalHeight / $originalWidth) * $maxWidth, 0);
+            }
+
+            switch ($imageType) {
+                case IMAGETYPE_PNG:
+                    $resizedimg = resize($maxWidth, $maxHeight, $uploadedFile);
+                    imagepng($resizedimg, $dirPath . $tmpFileName . "." . $ext);
+                    $resizedimg = $dirPath . $tmpFileName . "." . $ext;
+                    $resizedimgname = $tmpFileName . "." . $ext;
+                    break;
+                case IMAGETYPE_JPEG:
+                    $resizedimg = resize($maxWidth, $maxHeight, $uploadedFile);
+                    imagejpeg($resizedimg, $dirPath . $tmpFileName . "." . $ext, 100);
+                    $resizedimg = $dirPath . $tmpFileName . "." . $ext;
+                    $resizedimgname = $tmpFileName . "." . $ext;
+                    break;
+                case IMAGETYPE_GIF:
+                    $resizedimg = resize($maxWidth, $maxHeight, $uploadedFile);
+                    imagegif($resizedimg, $dirPath . $tmpFileName . "." . $ext);
+                    $resizedimg = $dirPath . $tmpFileName . "." . $ext;
+                    $resizedimgname = $tmpFileName . "." . $ext;
+                    break;
+                case IMAGETYPE_WEBP:
+                    $resizedimg = resize($maxWidth, $maxHeight, $uploadedFile);
+                    imagewebp($resizedimg, $dirPath . $tmpFileName . "." . $ext, 100);
+                    $resizedimg = $dirPath . $tmpFileName . "." . $ext;
+                    $resizedimgname = $tmpFileName . "." . $ext;
+                    break;
+                case IMAGETYPE_AVIF:
+                    $resizedimg = resize($maxWidth, $maxHeight, $uploadedFile);
+                    imageavif($resizedimg, $dirPath . $tmpFileName . "." . $ext, 100);
+                    $resizedimg = $dirPath . $tmpFileName . "." . $ext;
+                    $resizedimgname = $tmpFileName . "." . $ext;
+                    break;
+                default:
+                    return false;
+            }
+            $resizedimgsize = getimagesize($resizedimg);
+            if ($width <= $resizedimgsize[0]) {
+                $selectorwidth = $width;
+            } else {
+                $selectorwidth = $resizedimgsize[0];
+            }
+            if ($height <= $resizedimgsize[1]) {
+                $selectorheight = $height;
+            } else {
+                $selectorheight = $resizedimgsize[1];
+            }
+            $return = [
+                'status' => env('MANUAL_CROP_ENABLED') ? 1 : 2,
+                'image_name' => $resizedimgname,
+                'maxWidth' => $maxWidth,
+                'maxHeight' => $maxHeight,
+                'resizedimg' => $resizedimg,
+                'resize_height' => $resizedimgsize[1],
+                'resize_width' => $resizedimgsize[0],
+                'selector_width' => $selectorwidth,
+                'selector_height' => $selectorheight,
+                'dir_path' => $dirPath,
+                'thumbFileName' => $thumbFileName,
+                'ext' => $ext
+            ];
+            return $return;
+        } else {
+            return false;
+        }
+    } catch (\Throwable $th) {
+        return false;
+    }
+}
+
+function resize($maxWidth, $maxHeight, $originalFile)
+{
+    try {
+        $info = getimagesize($originalFile);
+        $mime = $info['mime'];
+        switch ($mime) {
+            case 'image/jpeg':
+                $image_create_func = 'imagecreatefromjpeg';
+                $image_save_func = 'imagejpeg';
+                $new_image_ext = 'jpg';
+                break;
+            case 'image/png':
+                $image_create_func = 'imagecreatefrompng';
+                $image_save_func = 'imagepng';
+                $new_image_ext = 'png';
+                break;
+            case 'image/gif':
+                $image_create_func = 'imagecreatefromgif';
+                $image_save_func = 'imagegif';
+                $new_image_ext = 'gif';
+                break;
+            case 'image/webp':
+                $image_create_func = 'imagecreatefromwebp';
+                $image_save_func = 'imagewebp';
+                $new_image_ext = 'webp';
+                break;
+            case 'image/avif':
+                $image_create_func = 'imagecreatefromavif';
+                $image_save_func = 'imageavif';
+                $new_image_ext = 'avif';
+                break;
+            default:
+                throw new Exception('Unknown image type.');
+        }
+        $img = $image_create_func($originalFile);
+        list($width, $height) = getimagesize($originalFile);
+        if ($width > $height) { // Landscape image - Calculate new width
+            $newWidth = ($width / $height) * $maxHeight;
+            $newHeight = $maxHeight;
+            if ($newWidth < $maxWidth) {
+                $newWidth = $maxWidth;
+                $newHeight = ($height / $width) * $maxWidth;
+            }
+        } else { // Protrait or Square - Calculate new height
+            $newWidth = $maxWidth;
+            $newHeight = ($height / $width) * $maxWidth;
+            if ($newHeight < $maxHeight) {
+                $newWidth = ($width / $height) * $maxHeight;
+                $newHeight = $maxHeight;
+            }
+        }
+        $newWidth = round($newWidth, 0);
+        $newHeight = round($newHeight, 0);
+        $tmp = imagecreatetruecolor($newWidth, $newHeight);
+        imagecopyresampled($tmp, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        return $tmp;
+    } catch (\Throwable $th) {
+        return false;
+    }
+}
+function final_crop($data)
+{
+    try {
+        if (isset($data['crop_image'])) {
+            $y1 = $data['top'];
+            $x1 = $data['left'];
+            $w = $data['right'] == 0 ? null : $data['right'];
+            $h = $data['bottom'] == 0 ? null : $data['bottom'];
+            $image = $data['image'];
+            $maxWidth = round($data['maxWidth'], 0);
+            $maxHeight = round($data['maxHeight'], 0);
+            $dirPath = $data['dirPath'];
+            $thumbFileName = $data['thumbFileName'];
+            $ext = $data['ext'];
+
+            $sourceProperties = getimagesize($image);
+
+            // If top, left, right, and bottom values are not set or are 0, auto crop from the middle
+            if ($w === null && $h === null) {
+                // Calculate center cropping
+                $centerX = $sourceProperties[0] / 2;
+                $centerY = $sourceProperties[1] / 2;
+                $cropWidth = $maxWidth;
+                $cropHeight = $maxHeight;
+                $x1 = max(0, $centerX - ($cropWidth / 2));
+                $y1 = max(0, $centerY - ($cropHeight / 2));
+                $w = min($sourceProperties[0], $cropWidth);
+                $h = min($sourceProperties[1], $cropHeight);
+            }
+
+            $resizedWidth = $sourceProperties[0];
+            $resizedHeight = $sourceProperties[1];
+            $imageType = $sourceProperties[2];
+            switch ($imageType) {
+                case IMAGETYPE_PNG:
+                    $imageSrc = imagecreatefrompng($image);
+                    $newImageLayer = imagecreatetruecolor($maxWidth, $maxHeight);
+                    $tmp = imageCropResize($imageSrc, $resizedWidth, $resizedHeight, $w, $h, $x1, $y1);
+                    $new_name = $thumbFileName . "_" . $maxWidth . "X" . $maxHeight . "." . $ext;
+                    unlink($image);
+                    imagepng($tmp, $dirPath . $new_name);
+                    break;
+                case IMAGETYPE_JPEG:
+                    $imageSrc = imagecreatefromjpeg($image);
+                    $newImageLayer = imagecreatetruecolor($maxWidth, $maxHeight);
+                    $tmp = imageCropResize($imageSrc, $resizedWidth, $resizedHeight, $w, $h, $x1, $y1);
+                    $new_name = $thumbFileName . "_" . $maxWidth . "X" . $maxHeight . "." . $ext;
+                    unlink($image);
+                    imagejpeg($tmp, $dirPath . $new_name);
+                    break;
+                case IMAGETYPE_GIF:
+                    $imageSrc = imagecreatefromgif($image);
+                    $newImageLayer = imagecreatetruecolor($maxWidth, $maxHeight);
+                    $tmp = imageCropResize($imageSrc, $resizedWidth, $resizedHeight, $w, $h, $x1, $y1);
+                    $new_name = $thumbFileName . "_" . $maxWidth . "X" . $maxHeight . "." . $ext;
+                    unlink($image);
+                    imagegif($tmp, $dirPath . $new_name);
+                    break;
+                case IMAGETYPE_WEBP:
+                    $imageSrc = imagecreatefromwebp($image);
+                    $newImageLayer = imagecreatetruecolor($maxWidth, $maxHeight);
+                    $tmp = imageCropResize($imageSrc, $resizedWidth, $resizedHeight, $w, $h, $x1, $y1);
+                    $new_name = $thumbFileName . "_" . $maxWidth . "X" . $maxHeight . "." . $ext;
+                    unlink($image);
+                    imagewebp($tmp, $dirPath . $new_name);
+                    break;
+                case IMAGETYPE_AVIF:
+                    $imageSrc = imagecreatefromavif($image);
+                    $newImageLayer = imagecreatetruecolor($maxWidth, $maxHeight);
+                    $tmp = imageCropResize($imageSrc, $resizedWidth, $resizedHeight, $w, $h, $x1, $y1);
+                    $new_name = $thumbFileName . "_" . $maxWidth . "X" . $maxHeight . "." . $ext;
+                    unlink($image);
+                    imageavif($tmp, $dirPath . $new_name);
+                    break;
+                default:
+                    // echo "Invalid Image type.<br><a href='index.php'>Back</a>";
+                    return false;
+            }
+            return $new_name;
+        }
+    } catch (\Throwable $th) {
+        // dd($th);
+        return false;
+    }
+}
+function imageCropResize($imageSrc, $imageWidth, $imageHeight, $maxWidth, $maxHeight, $x, $y)
+{
+    try {
+        $newImageLayer = imagecreatetruecolor($maxWidth, $maxHeight);
+        imagecopy($newImageLayer, $imageSrc, 0, 0, $x, $y, $imageWidth, $imageHeight);
+        return $newImageLayer;
+    } catch (\Throwable $th) {
+        return false;
+    }
+}
+//image crop and resize====================================================>
+
+if (!function_exists('format_date')) {
+    function format_date($date, $format = 'jS F Y')
+    {
+        try {
+            return Carbon::parse($date)->format($format);
+        } catch (DateException $err) {
+            return  '-';
+        }
+    }
+}
+if (!function_exists('format_amount')) {
+    function format_amount($amount, $decimals = 2, $currency = '$')
+    {
+        $formatted = number_format((float)$amount, $decimals, '.', ',');
+        return $currency . ' ' . $formatted;
+    }
+}
+
+if (!function_exists('all_active_countries')) {
+    function all_active_countries()
+    {
+        return Country::where('status', 1)->get();
+    }
+}
+
+if (!function_exists('is_expired')) {
+    function is_expired($date)
+    {
+        // 0 mean not expired, 1 mean expired
+        try {
+            $expire = !Carbon::parse($date)->endOfDay()->greaterThanOrEqualTo(now());
+            return $expire ? 1 : 0;
+        } catch (DateTimeException $err) {
+            return 1;
+        } catch (Exception $err) {
+            return 1;
+        }
+    }
+}
+
+if (!function_exists('getPlanColorClass')) {
+    function getPlanColorClass($key)
+    {
+        switch ($key) {
+            case 0:
+                return 'primary';
+                break;
+            case 1:
+                return 'warning';
+                break;
+            case 2:
+                return 'success';
+                break;
+            case 3:
+                return 'danger';
+                break;
+            default:
+                return 'secondary';
+                break;
+        }
+    }
+}
+
+if (!function_exists('stripe_transaction_fees')) {
+    function stripe_transaction_fees($price)
+    {
+        $stripe_percentage_fee = 2.9;
+        $stripe_fixed_fee = 0.30;
+        $net_percentage = 1 - ($stripe_percentage_fee / 100);
+        return round(($price + $stripe_fixed_fee) / $net_percentage, 2);
+    }
+}

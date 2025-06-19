@@ -1,0 +1,12 @@
+.nav-item.active {
+    background: #151a2c;
+}
+
+.error{
+    color: red;
+}
+
+.makeDisable{
+    opacity: .3;
+    cursor: no-drop;
+}

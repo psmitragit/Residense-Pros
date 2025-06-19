@@ -1,0 +1,204 @@
+/* Responsive Adjustments */
+@media (min-width: 1500px) {}
+
+@media (max-width: 1400px) {
+  .navbar li {
+    margin: 0 10px;
+  }
+
+}
+
+
+@media (max-width: 1200px) {
+  .navbar li {
+    margin: 0 7px;
+  }
+
+  .button1 {
+    position: relative;
+    overflow: hidden;
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    padding: 10px 15px;
+    font-family: var(--med);
+    font-size: clamp(15px, 1vw, 17px);
+  }
+
+  .myHeader img {
+    max-width: 220px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1120px) {}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .header-nav li {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .header-nav li .fa-user {
+    font-size: 16px;
+    width: 40px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--blue);
+    color: white;
+    padding: 10px;
+  }
+
+  .why_choose_us {
+    height: 184vh;
+  }
+
+  .footer-logo-img {
+    max-width: 180px;
+  }
+
+  .property-list-wrapper,
+  .map-wrapper {
+    height: 818px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    list-style: none;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .navbar li {
+    margin: 0 20px;
+  }
+
+  .logo-wrapper img {
+    width: 220px;
+    /* adjust as needed */
+    height: auto;
+  }
+
+  .header-nav li {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .header-nav li .fa-user {
+    font-size: 16px;
+    width: 40px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--blue);
+    color: white;
+    padding: 10px;
+  }
+
+  .home_banner {
+    background: url('../images/home-banner.jpg') no-repeat center top/cover;
+    height: 65vh;
+  }
+
+  .search-bar .form-control {
+    max-width: 100%;
+  }
+
+  .search-bar {
+    border-radius: 20px;
+  }
+
+  .my-60px {
+    margin: 30px 0;
+  }
+
+  #scrollToTopBtn {
+    position: fixed;
+    right: 10px;
+  }
+
+  .property-form .form-control {
+    height: 45px;
+  }
+
+  .prop_button_section {
+    margin: 30px 0 0px;
+  }
+
+  .why_choose_us {
+    position: relative;
+    background: url('../images/why-choose-us.jpg') no-repeat center top / cover;
+    height: 85vh;
+    background-attachment: local;
+  }
+
+  .about_heading::after {
+    bottom: -10px;
+  }
+.property-list-wrapper,
+  .map-wrapper {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-logo-img {
+    max-width: 135px;
+    height: auto;
+  }
+
+  .footer-links li {
+    margin-bottom: 5px;
+  }
+
+  .prop_button_section button {
+    width: 160px;
+    height: 50px;
+  }
+}
+
+
+@media (max-width: 360px) {
+  .logo-wrapper img {
+    width: 180px;
+    /* adjust as needed */
+    height: auto;
+  }
+}
+
+/* Default Bootstrap behavior (col-12 for mobile, col-sm-6 for tablet, col-lg-4 for large screens) */
+.col-5cards {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 576px) {
+  .col-5cards {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 992px) {
+  .col-5cards {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+}
+
+/* Between 1400px and 1599px: 4 cards per row */
+@media (min-width: 1400px) and (max-width: 1599.98px) {
+  .col-5cards {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+}
+
+/* Above 1600px: 5 cards per row */
+@media (min-width: 1600px) {
+  .col-5cards {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}

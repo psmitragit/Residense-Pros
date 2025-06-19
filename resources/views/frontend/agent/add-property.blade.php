@@ -1,0 +1,394 @@
+@extends('frontend.layout.app')
+
+@section('content')
+    <div class="container pt-3 pb-5 py-md-5 px-3 px-md-0 add-property-page">
+        <h2 class="addprop_heading mb-4">Add New Property</h2>
+
+        <form class="property-form">
+            <div class="mb-3">
+                <label class="form-label">Property Caption *</label>
+                <input type="text" name="property_caption" class="form-control"
+                    placeholder="Eg: Banjara Hills, Jubilee Hills, etc">
+                <span class="error property_caption_error">This field is required</span>
+            </div>
+
+            <div class="row mb-4 g-3 align-items-center">
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Residential Type *</label>
+                    <select class="form-select" name="residential_type">
+                        <option selected disabled>Select Type</option>
+                        <option>Flat</option>
+                        <option>House</option>
+                        <option>Villa</option>
+                        <option>Plot</option>
+                        <option>Farm Land</option>
+                        <option>Other</option>
+                    </select>
+                    <span class="error residential_type_error">This field is required</span>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="mb-3">
+                        <div class="d-flex gap-5 align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="residential_option" id="buy"
+                                    value="buy">
+                                <label class="form-check-label" for="buy">BUY</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="residential_option" id="rent"
+                                    value="rent">
+                                <label class="form-check-label" for="rent">RENT</label>
+                            </div>
+                        </div>
+                        <span class="error residential_option_error">This field is required</span>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-12 col-md-6">
+                            <input type="text" class="form-control" name="price" placeholder="$">
+                            <span class="error price_error">This field is required</span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <select class="form-select" name="price_duration">
+                                <option>Month</option>
+                                <option>Day</option>
+                                <option>Year</option>
+                            </select>
+                            <span class="error price_duration_error">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label class="mb-3 form-label">Property Details</label>
+            <div class="row g-3 mb-3 prop_details">
+                <div class="col-md-12">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address">
+                    <span class="error address_error">This field is required</span>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" name="city" id="city" class="form-control" placeholder="City">
+                    <span class="error city_error">This field is required</span>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" name="state" id="state" class="form-control" placeholder="State">
+                    <span class="error state_error">This field is required</span>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="country" class="form-label">Country</label>
+                    <select name="country" id="country" class="form-select">
+                        <option value="">* Country</option>
+                        @foreach (all_active_countries() as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                    <span class="error country_error">This field is required</span>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="zip" class="form-label">Zip Code</label>
+                    <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip">
+                    <span class="error zip_error">This field is required</span>
+                </div>
+
+                <div class="row g-3 mb-3 mb-md-5" id="nearbyplaces">
+                    <div class="col-md-6">
+                        <label for="nearby_1" class="form-label">Nearby Places</label>
+                        <input type="text" name="nearby[]" id="nearby_1" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Distance</label>
+                        <div class="custom-distance-box d-flex align-items-center justify-content-between px-3 py-2 mb-3">
+                            <input type="number" name="distance[]" class="form-control border-0 shadow-none p-0"
+                                placeholder="0">
+                            <select name="distance_unit[]" class="form-select border-0 shadow-none p-0 text-center">
+                                <option selected>Kilometers</option>
+                                <option>Miles</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="d-flex justify-content-md-end justify-content-center">
+                        <button type="button" class="button2" id="addNearbyPlaces"><i class="fa-solid fa-plus"></i> Add
+                            Row</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3 prop_details">
+                <div class="col-md-6">
+                    <div class="row g-2">
+                        <label class="form-label">Surface Area *</label>
+                        <div class="col-md-6">
+                            <select class="form-select" name="surface_area_value">
+                                <option>2400</option>
+                                <option>2500</option>
+                                <option>2800</option>
+                                <option>3000</option>
+                            </select>
+                            <span class="error surface_area_value_error">This field is required</span>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="surface_area_unit">
+                                <option>Sq Ft</option>
+                                <option>Sq Yards</option>
+                            </select>
+                            <span class="error surface_area_unit_error">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row g-2">
+                        <label class="form-label">Plot Size *</label>
+                        <div class="col-md-6">
+                            <select class="form-select" name="plot_size_value">
+                                <option>60</option>
+                                <option>80</option>
+                                <option>120</option>
+                                <option>150</option>
+                            </select>
+                            <span class="error plot_size_value_error">This field is required</span>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="plot_size_unit">
+                                <option>Accrs</option>
+                                <option>Sq Yards</option>
+                            </select>
+                            <span class="error plot_size_unit_error">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Bedrooms *</label>
+                            <div class="counter-box d-flex align-items-center justify-content-between border">
+                                <button class="counter-btn" type="button" onclick="decrement('bedrooms')">-</button>
+                                <span id="bedrooms" class="counter-value">0</span>
+                                <button class="counter-btn-right" type="button"
+                                    onclick="increment('bedrooms')">+</button>
+                            </div>
+                            <input type="hidden" name="bedrooms" id="bedrooms_input" value="0">
+                            <span class="error bedrooms_error">This field is required</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Bathrooms *</label>
+                            <div class="counter-box d-flex align-items-center justify-content-between border">
+                                <button class="counter-btn" type="button" onclick="decrement('bathrooms')">-</button>
+                                <span id="bathrooms" class="counter-value">0</span>
+                                <button class="counter-btn-right" type="button"
+                                    onclick="increment('bathrooms')">+</button>
+                            </div>
+                            <input type="hidden" name="bathrooms" id="bathrooms_input" value="0">
+                            <span class="error bathrooms_error">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Property Condition *</label>
+                    <select class="form-select" name="property_condition">
+                        <option selected disabled>Select Condition</option>
+                        <option>Furnished</option>
+                        <option>Unfurnished</option>
+                        <option>Semi Furnished</option>
+                        <option>Fully Furnished</option>
+                    </select>
+                    <span class="error property_condition_error">This field is required</span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Property Age *</label>
+                    <select class="form-select" name="property_age">
+                        <option selected disabled>Select Age</option>
+                        <option>0-5 Years</option>
+                        <option>5-10 Years</option>
+                        <option>10-15 Years</option>
+                        <option>15-20 Years</option>
+                    </select>
+                    <span class="error property_age_error">This field is required</span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Property Available From *</label>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <select class="form-select" name="available_month">
+                                <option selected disabled>Select month</option>
+                                <option>January</option>
+                                <option>February</option>
+                                <option>March</option>
+                                <option>April</option>
+                                <option>May</option>
+                            </select>
+                            <span class="error available_month_error">This field is required</span>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="available_year">
+                                <option selected disabled>Select year</option>
+                                <option>2020</option>
+                                <option>2021</option>
+                                <option>2022</option>
+                                <option>2023</option>
+                                <option>2024</option>
+                                <option>2025</option>
+                            </select>
+                            <span class="error available_year_error">This field is required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mb-2 mt-4 form-label">Amenities *</h5>
+                <div class="row g-2 mb-4 amenities-list">
+                    @foreach ($amenities as $item)
+                        <div class="col-6 col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="amenities[]"
+                                    value="{{ $item->id ?? '' }}" id="amanity_{{ $item->id }}">
+                                <label class="form-check-label" for="amanity_{{ $item->id }}">
+                                    {{ $item->name ?? '' }}
+                                </label>
+                            </div>
+                        </div>
+                    @endforeach
+
+                </div>
+                <span class="error amenities_error">This field is required</span>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Description</label>
+                <p for="desc" class="about-prop mb-2 mb-md-4">Write About the Property *</p>
+                <textarea id="desc" class="form-control" rows="6" name="description"></textarea>
+                <span class="error description_error">This field is required</span>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Floor Plan <span>(Optional)</span></label>
+                <p class="about-prop mb-2 mb-md-4">Maximum 10 photos. 2 MB each. (File supported .jpg, .jpeg)</p>
+
+                {{-- <div class="row property_image_shown my-3">
+                    <div class="col-md-2 col-4 image-container">
+                        <button type="button" class="delete-image">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <img src="http://soumik/residences-pros/assets/images/prop1.jpg" alt="" class="">
+                    </div>
+                </div> --}}
+
+                <div class="row property_image_shown my-3" id="property_image_shown">
+                </div>
+
+                <div class="upload-box p-4 text-center cursor-pointer" id="floorUploadBox">
+                    <img src="{{ asset('assets/frontend/images/upload-image.png') }}" alt="upload-image"
+                        class="img-fluid">
+                    <p class="mb-1">
+                        Click to upload floor plan
+                    </p>
+                    <input type="file" class="form-control-file d-none" id="floorInput" accept=".jpg,.jpeg"
+                        name="floor_plan[]" multiple>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Property Photos</label>
+                <p class="about-prop mb-2 mb-md-4">Maximum 10 photos. 2 MB each. (File supported .jpg, .jpeg)</p>
+
+                <div class="row property_image_shown my-3" id="property_gelery_shown">
+                </div>
+                <div class="upload-box p-4 text-center cursor-pointer" id="photoUploadBox">
+                    <img src="{{ asset('assets/frontend/images/upload-image.png') }}" alt="upload-image"
+                        class="img-fluid">
+                    <p class="mb-1">Upload property images (max 20MB)</p>
+                    <input type="file" multiple class="form-control-file d-none" id="photoInput" accept=".jpg,.jpeg"
+                        name="galary[]">
+                </div>
+            </div>
+            <div class="text-center prop_button_section">
+                <button type="submit" class="button1 me-2 mb-3 mb-md-0">Save as Draft</button>
+                <button type="submit" class="button2">Publish</button>
+            </div>
+        </form>
+    </div>
+@endsection
+
+@push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let key = 999;
+            $('#addNearbyPlaces').on('click', function() {
+                let rowNo = key++;
+                let html = `<div class="col-md-6 nearby-row-${rowNo}">
+                    <label for="nearby_${rowNo}" class="form-label">Nearby Places</label>
+                    <input type="text" name="nearby[]" id="nearby_${rowNo}" class="form-control">
+                </div>
+                <div class="col-md-5 nearby-row-${rowNo}">
+                    <label class="form-label">Distance</label>
+                    <div class="custom-distance-box d-flex align-items-center justify-content-between px-3 py-2 mb-3">
+                        <input type="number" name="distance[]" class="form-control border-0 shadow-none p-0"
+                            placeholder="0">
+                        <select name="distance_unit[]" class="form-select border-0 shadow-none p-0 text-center">
+                            <option selected>Kilometers</option>
+                            <option>Miles</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1 d-flex justify-content-center align-items-center nearby-row-${rowNo}">
+                     <label class="form-label"></label>
+                    <button class="deleteRow delete-row" data-key="${rowNo}" type="button"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                `;
+                $('#nearbyplaces').append(html);
+            })
+
+            $(document).on('click', '.deleteRow', function() {
+                if ($(`.nearby-row-${$(this).data('key')}`)) {
+                    $(`.nearby-row-${$(this).data('key')}`).remove();
+                }
+            })
+
+            $('#floorInput').on('change', function() {
+                let files = this.files;
+                let previewBox = $('#property_image_shown');
+                showChangedImages(files, previewBox);
+            });
+
+            $('#photoInput').on('change', function() {
+                let files = this.files;
+                let previewBox = $('#property_gelery_shown');
+                showChangedImages(files, previewBox);
+            });
+        });
+
+
+        function showChangedImages(files, previewBox) {
+            previewBox.empty();
+
+            if (files.length === 0) {
+                return;
+            }
+
+            $.each(files, function(index, file) {
+                if (!file.type.match('image*')) return;
+
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let imageWrapper = `
+                        <div class="col-md-2 col-6 image-container mb-2">
+                            <img src="${e.target.result}" alt="Preview" class="img-fluid rounded">
+                        </div>
+                    `;
+                    previewBox.append(imageWrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+@endpush
