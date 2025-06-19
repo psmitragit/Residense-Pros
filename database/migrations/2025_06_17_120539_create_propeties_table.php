@@ -53,6 +53,8 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->nullOnUpdate();
 
             $table->enum('status', ['draft', 'published', 'pending'])->default('draft');
+
+            $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });
 

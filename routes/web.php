@@ -38,6 +38,7 @@ Route::controller(HomeController::class)->group(function () {
 
 Route::middleware('web', AgentLoggedInMiddleware::class)->controller(AgentController::class)->group(function(){
     Route::get('/add-property', 'addProperty')->name('property.add');
+    Route::post('/do-add-property', 'doAddProperty')->name('agent.property.add.do');
 });
 
 Route::controller(SubscriptionController::class)->group(function(){

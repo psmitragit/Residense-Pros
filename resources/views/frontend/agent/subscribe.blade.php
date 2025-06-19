@@ -164,8 +164,8 @@
                             if (paymentIntent.status == "succeeded") {
                                 window.location.href = res.data.url;
                             } else {
-                                showAlert('', 'Payment Unsuccessful', 'error')
-                                resetButton()
+                                showToast('', 'Payment Unsuccessful', 'error');
+                                resetButton();
                             }
                         }
                     }

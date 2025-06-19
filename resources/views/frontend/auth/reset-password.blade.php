@@ -48,7 +48,7 @@
                             if (res.errors) {
                                 showValidationError(res.errors);
                             } else {
-                                showAlert(res.msg || 'Something Went Wrong.', 'danger');
+                                showToast(res.msg || 'Something Went Wrong.', '', 'error');
                             }
                         } else {
                             if (res.redirect) {

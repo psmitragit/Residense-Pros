@@ -4,12 +4,12 @@
     <div class="container pt-3 pb-5 py-md-5 px-3 px-md-0 add-property-page">
         <h2 class="addprop_heading mb-4">Add New Property</h2>
 
-        <form class="property-form">
+        <form class="property-form" id="propertyForm" method="POST" action="{{ route('agent.property.add.do') }}">
             <div class="mb-3">
                 <label class="form-label">Property Caption *</label>
                 <input type="text" name="property_caption" class="form-control"
                     placeholder="Eg: Banjara Hills, Jubilee Hills, etc">
-                <span class="error property_caption_error">This field is required</span>
+                <span class="error property_caption_error"></span>
             </div>
 
             <div class="row mb-4 g-3 align-items-center">
@@ -17,14 +17,14 @@
                     <label class="form-label">Residential Type *</label>
                     <select class="form-select" name="residential_type">
                         <option selected disabled>Select Type</option>
-                        <option>Flat</option>
-                        <option>House</option>
-                        <option>Villa</option>
-                        <option>Plot</option>
-                        <option>Farm Land</option>
-                        <option>Other</option>
+                        <option value="Flat">Flat</option>
+                        <option value="House">House</option>
+                        <option value="Villa">Villa</option>
+                        <option value="Plot">Plot</option>
+                        <option value="Farm Land">Farm Land</option>
+                        <option value="Other">Other</option>
                     </select>
-                    <span class="error residential_type_error">This field is required</span>
+                    <span class="error residential_type_error"></span>
                 </div>
 
                 <div class="col-12 col-md-6">
@@ -41,21 +41,21 @@
                                 <label class="form-check-label" for="rent">RENT</label>
                             </div>
                         </div>
-                        <span class="error residential_option_error">This field is required</span>
+                        <span class="error residential_option_error"></span>
                     </div>
 
                     <div class="row g-2">
                         <div class="col-12 col-md-6">
                             <input type="text" class="form-control" name="price" placeholder="$">
-                            <span class="error price_error">This field is required</span>
+                            <span class="error price_error"></span>
                         </div>
                         <div class="col-12 col-md-6">
                             <select class="form-select" name="price_duration">
-                                <option>Month</option>
-                                <option>Day</option>
-                                <option>Year</option>
+                                <option value="month">Month</option>
+                                <option value="day">Day</option>
+                                <option value="year">Year</option>
                             </select>
-                            <span class="error price_duration_error">This field is required</span>
+                            <span class="error price_duration_error"></span>
                         </div>
                     </div>
                 </div>
@@ -64,21 +64,21 @@
             <label class="mb-3 form-label">Property Details</label>
             <div class="row g-3 mb-3 prop_details">
                 <div class="col-md-12">
-                    <label for="address" class="form-label">Address</label>
+                    <label for="address" class="form-label">Address *</label>
                     <input type="text" name="address" id="address" class="form-control" placeholder="Enter Address">
-                    <span class="error address_error">This field is required</span>
+                    <span class="error address_error"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="city" class="form-label">City</label>
                     <input type="text" name="city" id="city" class="form-control" placeholder="City">
-                    <span class="error city_error">This field is required</span>
+                    <span class="error city_error"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="state" class="form-label">State</label>
                     <input type="text" name="state" id="state" class="form-control" placeholder="State">
-                    <span class="error state_error">This field is required</span>
+                    <span class="error state_error"></span>
                 </div>
 
                 <div class="col-md-6">
@@ -89,13 +89,13 @@
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
                     </select>
-                    <span class="error country_error">This field is required</span>
+                    <span class="error country_error"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="zip" class="form-label">Zip Code</label>
                     <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip">
-                    <span class="error zip_error">This field is required</span>
+                    <span class="error zip_error"></span>
                 </div>
 
                 <div class="row g-3 mb-3 mb-md-5" id="nearbyplaces">
@@ -129,19 +129,19 @@
                         <label class="form-label">Surface Area *</label>
                         <div class="col-md-6">
                             <select class="form-select" name="surface_area_value">
-                                <option>2400</option>
-                                <option>2500</option>
-                                <option>2800</option>
-                                <option>3000</option>
+                                <option value="2400">2400</option>
+                                <option value="2500">2500</option>
+                                <option value="2800">2800</option>
+                                <option value="3000">3000</option>
                             </select>
-                            <span class="error surface_area_value_error">This field is required</span>
+                            <span class="error surface_area_value_error"></span>
                         </div>
                         <div class="col-md-6">
                             <select class="form-select" name="surface_area_unit">
-                                <option>Sq Ft</option>
-                                <option>Sq Yards</option>
+                                <option value="sqft">Sq Ft</option>
+                                <option value="sqyard">Sq Yards</option>
                             </select>
-                            <span class="error surface_area_unit_error">This field is required</span>
+                            <span class="error surface_area_unit_error"></span>
                         </div>
                     </div>
                 </div>
@@ -151,19 +151,19 @@
                         <label class="form-label">Plot Size *</label>
                         <div class="col-md-6">
                             <select class="form-select" name="plot_size_value">
-                                <option>60</option>
-                                <option>80</option>
-                                <option>120</option>
-                                <option>150</option>
+                                <option value="60">60</option>
+                                <option value="80">80</option>
+                                <option value="120">120</option>
+                                <option value="150">150</option>
                             </select>
-                            <span class="error plot_size_value_error">This field is required</span>
+                            <span class="error plot_size_value_error"></span>
                         </div>
                         <div class="col-md-6">
                             <select class="form-select" name="plot_size_unit">
-                                <option>Accrs</option>
-                                <option>Sq Yards</option>
+                                <option value="acer">Accrs</option>
+                                <option value="sqyard">Sq Yards</option>
                             </select>
-                            <span class="error plot_size_unit_error">This field is required</span>
+                            <span class="error plot_size_unit_error"></span>
                         </div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                                     onclick="increment('bedrooms')">+</button>
                             </div>
                             <input type="hidden" name="bedrooms" id="bedrooms_input" value="0">
-                            <span class="error bedrooms_error">This field is required</span>
+                            <span class="error bedrooms_error"></span>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Bathrooms *</label>
@@ -190,7 +190,7 @@
                                     onclick="increment('bathrooms')">+</button>
                             </div>
                             <input type="hidden" name="bathrooms" id="bathrooms_input" value="0">
-                            <span class="error bathrooms_error">This field is required</span>
+                            <span class="error bathrooms_error"></span>
                         </div>
                     </div>
                 </div>
@@ -199,24 +199,23 @@
                     <label class="form-label">Property Condition *</label>
                     <select class="form-select" name="property_condition">
                         <option selected disabled>Select Condition</option>
-                        <option>Furnished</option>
-                        <option>Unfurnished</option>
-                        <option>Semi Furnished</option>
-                        <option>Fully Furnished</option>
+                        <option value="furnished">Furnished</option>
+                        <option value="un_furnished">Unfurnished</option>
+                        <option value="semi_furnished">Semi Furnished</option>
                     </select>
-                    <span class="error property_condition_error">This field is required</span>
+                    <span class="error property_condition_error"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Property Age *</label>
                     <select class="form-select" name="property_age">
                         <option selected disabled>Select Age</option>
-                        <option>0-5 Years</option>
-                        <option>5-10 Years</option>
-                        <option>10-15 Years</option>
-                        <option>15-20 Years</option>
+                        <option value="0">0-5 Years</option>
+                        <option value="5">5-10 Years</option>
+                        <option value="10">10-15 Years</option>
+                        <option value="15">15-20 Years</option>
                     </select>
-                    <span class="error property_age_error">This field is required</span>
+                    <span class="error property_age_error"></span>
                 </div>
 
                 <div class="col-md-6">
@@ -225,25 +224,20 @@
                         <div class="col-md-6">
                             <select class="form-select" name="available_month">
                                 <option selected disabled>Select month</option>
-                                <option>January</option>
-                                <option>February</option>
-                                <option>March</option>
-                                <option>April</option>
-                                <option>May</option>
+                                @foreach ($months as $key => $month)
+                                    <option value="{{ $key + 1 }}">{{ $month }}</option>
+                                @endforeach
                             </select>
-                            <span class="error available_month_error">This field is required</span>
+                            <span class="error available_month_error"></span>
                         </div>
                         <div class="col-md-6">
                             <select class="form-select" name="available_year">
                                 <option selected disabled>Select year</option>
-                                <option>2020</option>
-                                <option>2021</option>
-                                <option>2022</option>
-                                <option>2023</option>
-                                <option>2024</option>
-                                <option>2025</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endforeach
                             </select>
-                            <span class="error available_year_error">This field is required</span>
+                            <span class="error available_year_error"></span>
                         </div>
                     </div>
                 </div>
@@ -263,13 +257,13 @@
                     @endforeach
 
                 </div>
-                <span class="error amenities_error">This field is required</span>
+                <span class="error amenities_error"></span>
             </div>
             <div class="mb-4">
                 <label class="form-label">Description</label>
                 <p for="desc" class="about-prop mb-2 mb-md-4">Write About the Property *</p>
                 <textarea id="desc" class="form-control" rows="6" name="description"></textarea>
-                <span class="error description_error">This field is required</span>
+                <span class="error description_error"></span>
             </div>
             <div class="mb-4">
                 <label class="form-label">Floor Plan <span>(Optional)</span></label>
@@ -296,6 +290,7 @@
                     <input type="file" class="form-control-file d-none" id="floorInput" accept=".jpg,.jpeg"
                         name="floor_plan[]" multiple>
                 </div>
+                <span class="error floor_plan_error"></span>
             </div>
             <div class="mb-4">
                 <label class="form-label">Property Photos</label>
@@ -310,11 +305,16 @@
                     <input type="file" multiple class="form-control-file d-none" id="photoInput" accept=".jpg,.jpeg"
                         name="galary[]">
                 </div>
+                <span class="error galary_error"></span>
             </div>
             <div class="text-center prop_button_section">
-                <button type="submit" class="button1 me-2 mb-3 mb-md-0">Save as Draft</button>
-                <button type="submit" class="button2">Publish</button>
+                <input type="hidden" name="draft" value="0" id="draft">
+                <button type="button" class="button1 me-2 mb-3 mb-md-0" id="draftBtn">Save as Draft</button>
+                <button type="button" class="button2" id="publishBtn">Publish</button>
+                <span class="error draft_error"></span>
             </div>
+            <span class="error test_error"></span>
+            <input type="text" name="test">
         </form>
     </div>
 @endsection
@@ -357,27 +357,87 @@
             $('#floorInput').on('change', function() {
                 let files = this.files;
                 let previewBox = $('#property_image_shown');
-                showChangedImages(files, previewBox);
+                showChangedImages(files, previewBox, 'floorInput');
             });
 
             $('#photoInput').on('change', function() {
                 let files = this.files;
                 let previewBox = $('#property_gelery_shown');
-                showChangedImages(files, previewBox);
+                showChangedImages(files, previewBox, 'photoInput');
             });
+
+            $('#draftBtn').on('click', function() {
+                $('#draft').val(1);
+                $('#propertyForm').submit();
+            });
+
+            $('#publishBtn').on('click', function() {
+                $('#draft').val(0);
+                $('#propertyForm').submit();
+            });
+
+            let addPropertyProcess = false;
+            $('#propertyForm').on('submit', function(e) {
+                e.preventDefault();
+                if (addPropertyProcess) {
+                    showToast('', 'Submission already in progress.', 'warning');
+                    return false;
+                }
+                addPropertyProcess = true;
+                $('.error').empty()
+                let data = new FormData(e.target)
+                let btn = $('#publishBtn');
+                if ($('#draft').val() > 0) {
+                    btn = $('#draftBtn');
+                }
+                $.ajax({
+                    url: e.target.action,
+                    type: e.target.method,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    data,
+                    success: function(res) {
+                        if (res.success == 0) {
+                            if (res.errors) {
+                                showValidationError(res.errors);
+                            } else {
+                                showToast(response.msg || 'Something Went Wrong.', '', 'error');
+                            }
+                        } else {
+                            if (res.redirect) {
+                                window.location.href = res.redirect;
+                            } else {
+                                showToast('', res.msg, 'success', 'top-end', 10000);
+                            }
+                        }
+                    },
+                    beforeSend: function() {
+                        btn.addClass('disabled');
+                    },
+                    complete: function() {
+                        btn.removeClass('disabled');
+                        addPropertyProcess = false;
+                    }
+                })
+            })
+
+
         });
 
 
-        function showChangedImages(files, previewBox) {
+        function showChangedImages(files, previewBox, inputName) {
             previewBox.empty();
-
             if (files.length === 0) {
                 return;
             }
-
+            if (files.length > 10) {
+                $(`#${inputName}`).val('');
+                showToast('You can select image only upto 10', '', 'warning');
+                return;
+            }
             $.each(files, function(index, file) {
                 if (!file.type.match('image*')) return;
-
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     let imageWrapper = `

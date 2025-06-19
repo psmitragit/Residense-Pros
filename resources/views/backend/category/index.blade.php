@@ -112,13 +112,13 @@
                             if (response.errors) {
                                 showValidationError(response.errors);
                             } else {
-                                showAlert(response.msg || 'Something Went Wrong.', 'danger');
+                                showToast(response.msg || 'Something Went Wrong.', '', 'error');
                             }
                         } else {
                             if (response.redirect) {
                                 window.location.href = response.redirect;
                             } else {
-                                showAlert(response.msg || 'Success.', 'success');
+                                showToast(response.msg || 'Success', '', 'success');
                             }
                         }
                     },

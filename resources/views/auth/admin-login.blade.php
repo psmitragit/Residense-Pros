@@ -78,7 +78,7 @@
                             if (response.errors) {
                                 showValidationError(response.errors);
                             } else {
-                                showAlert(response.msg || 'Something Went Wrong.', 'danger');
+                                showToast(response.msg || 'Something Went Wrong.', '', 'error');
                             }
                         } else {
                             if (response.redirect) {
