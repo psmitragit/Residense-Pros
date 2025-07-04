@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleWare;
+use App\Http\Middleware\AgentDashboardMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
+            Route::middleware(['web', AgentDashboardMiddleware::class])
+                ->prefix('agent')
+                ->name('agent.')
+                ->group(base_path('routes/agent.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

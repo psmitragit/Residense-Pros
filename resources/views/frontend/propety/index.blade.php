@@ -127,7 +127,7 @@
 
                 <!-- 1st Property -->
                 <div class=" col-lg-4 col-sm-6 col-12 col-5cards">
-                    <a href="{{ route('property.details', ['id' => 1]) }}">
+                    <a href="{{ route('property.details', ['slug' => 'test-proepr']) }}">
                         <div class="card custom-card h-100 shadow-sm">
                             <div class="property-image-wrapper position-relative">
                                 <img src="{{ asset('assets/frontend/images/prop1.jpg') }}" class="card-img-top card-img"

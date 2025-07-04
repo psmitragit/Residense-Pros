@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('path')->nullable();
             $table->enum('file_type', ['image', 'pdf'])->default('image');
             $table->enum('file_for', ['floor', 'gallery'])->default('gallery');
+            $table->foreignId('property_id')->nullable()->constrained('properties')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

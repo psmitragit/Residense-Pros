@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PropetyNearbyPlace extends Model
+class PropertyNearbyPlace extends Model
 {
     protected $guarded = [];
 }

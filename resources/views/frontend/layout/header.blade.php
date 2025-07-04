@@ -61,29 +61,28 @@
 
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-3 border-0 mt-2 py-2 small"
                             aria-labelledby="accountDropdown">
-
-                            <!-- Dashboard Link -->
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
-                                    href="#">
-                                    <i class="fa-solid fa-user-tie" style="font-size: 0.85rem;"></i>
-                                    <span>My Dashboard</span>
-                                </a>
-                            </li>
-
-                            <!-- Profile Link -->
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="#">
-                                    <i class="fa-regular fa-user text-primary" style="font-size: 0.85rem;"></i>
-                                    <span>My Profile</span>
-                                </a>
-                            </li>
+                            @if ((auth()?->user()?->role ?? '') == 'agent')
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="{{route('agent.index')}}" target="_blank">
+                                        <i class="fa-solid fa-user-tie" style="font-size: 0.85rem;"></i>
+                                        <span>My Dashboard</span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if ((auth()?->user()?->role ?? '') == 'user')
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="#">
+                                        <i class="fa-regular fa-user text-primary" style="font-size: 0.85rem;"></i>
+                                        <span>My Profile</span>
+                                    </a>
+                                </li>
+                            @endif
                             <li>
                                 <hr class="dropdown-divider my-1">
                             </li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2 text-danger"
-                                   data-href="{{ route('auth.logout') }}" href="javascript:void(0);" id="logoutBtn">
+                                    data-href="{{ route('auth.logout') }}" href="javascript:void(0);" id="logoutBtn">
                                     <i class="fa-solid fa-arrow-right-from-bracket" style="font-size: 0.85rem;"></i>
                                     <span>Logout</span>
                                 </a>

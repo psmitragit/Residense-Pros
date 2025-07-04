@@ -2,9 +2,13 @@
 
 namespace App\Http\Requests\Frontend;
 
+use App\Models\PropertyImages;
+use App\Rules\Property\DistenceRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+
+use function PHPUnit\Framework\isNan;
 
 class AddpropertyRequest extends FormRequest
 {
@@ -43,7 +47,83 @@ class AddpropertyRequest extends FormRequest
             'description' => [$reqOrNull, 'max:250']
         ];
 
+        if (!empty($this->nearby)) {
+            foreach ($this->nearby as $key => $value) {
+                if (!empty($value) && (empty($this->distance[$key]) || ($this->distance_unit[$key] != 'Miles' && $this->distance_unit[$key] != 'Kilometers'))) {
+                    $rules['nearby_' . $key] = ['required'];
+                }
+            }
+        }
+
+        $max_gelery_limit = 10;
+        $max_floor_limit = 10;
+        if (!empty($this->property_id)) {
+            $geleryCount =  PropertyImages::where('file_for', 'gallery')->where('property_id', $this->property_id)->count();
+            $floorCount =  PropertyImages::where('file_for', 'floor')->where('property_id', $this->property_id)->count();
+            $total = 0;
+            $floorTotal = 0;
+            if (!empty($this->remove_galary_images)) {
+                $total = count(explode(',', $this->remove_galary_images));
+                $total = $total - 1;
+            }
+            if (!empty($this->remove_floor_images)) {
+                $floorTotal = count(explode(',', $this->remove_floor_images));
+                $floorTotal = $floorTotal - 1;
+            }
+            $max_gelery_limit = 10 - ($geleryCount - $total);
+            $max_floor_limit = 10 - ($floorCount - $floorTotal);
+        }
+
+        if (empty($this->galary)) {
+            if (!empty($this->property_id)) {
+                $rules['galary'] = $max_gelery_limit == 10 ? 'required' : 'nullable';
+            } else {
+                $rules['galary'] = $reqOrNull;
+            }
+        } else {
+            if (count($this->galary) > $max_gelery_limit) {
+                $rules['galary_e'] = 'required';
+            } else {
+                foreach ($this->galary as $key => $value) {
+                    $size = $value->getSize();
+                    $mbSize = $size / (1024 * 1024);
+                    if ($mbSize > 2) {
+                        $rules['galary_e2'] = 'required';
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!empty($this->floor_plan)) {
+            if (count($this->floor_plan) > $max_floor_limit) {
+                $rules['floor_plan_max'] = 'required';
+            } else {
+                foreach ($this->floor_plan as $key => $value) {
+                    $size = $value->getSize();
+                    $mbSize = $size / (1024 * 1024);
+                    if ($mbSize > 2) {
+                        $rules['floor_plan_e'] = 'required';
+                        break;
+                    }
+                }
+            }
+        }
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'nearby_*.required' => 'Please provide the distense and unit properly',
+            'galary.required' => 'Please provide atleast one image',
+            'galary_e.required' => 'You can upload upto 10 images.',
+            'galary_e2.required' => 'All images size should less than 2MB.',
+            'floor_plan.required' => 'This field is required.',
+            'floor_plan_max.required' => 'You can upload upto 10 images.',
+            'floor_plan_e.required' => 'All images size should less than 2MB.',
+            'amenities.required' => 'Please choose atleast one amenity'
+        ];
     }
 
     public function failedValidation(Validator $validator)

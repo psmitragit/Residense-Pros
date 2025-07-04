@@ -27,4 +27,5 @@ Route::controller(CategoryController::class)->prefix('categories')->as('categori
 
 Route::controller(PropertyController::class)->prefix('property')->as('property.')->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/pending', 'pending')->name('pending');
 });

@@ -45,6 +45,22 @@ class EmailTemplateSeeder extends Seeder
                 'keywords' => '###NAME###,###PLAN_NAME###,###END_DATE###,###BENIFITS###,###AMOUNT###',
                 'created_at' => now(),
                 'updated_at' => now()
+            ],
+            [
+                'id' => 3,
+                'subject' => 'New Property Listing Submitted for Approval',
+                'content' => 'Hello Admin,<br><br>
+                    A new property listing has been submitted by an agent and is pending your approval.<br><br>
+                    Listing Details:<br>
+                        Agent Name: ###NAME###<br>
+                        Property Title: ###PROPERTY###<br>
+                        Submitted On: ###DATE###<br><br>
+                    Please <a href="###URL###">click here</a> to review and approve the listing.<br><br>
+                    Thank you,<br>
+                    Residence Pros',
+                'keywords' => '###NAME###,###PROPERTY###,###DATE###,###URL###',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ]);
     }

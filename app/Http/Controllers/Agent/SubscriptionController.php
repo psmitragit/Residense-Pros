@@ -142,4 +142,17 @@ class SubscriptionController extends Controller
             return false;
         }
     }
+
+    public function index()
+    {
+        $title = 'Subscriptions';
+        $links = [
+            [
+                'name' => 'Subscription'
+            ]
+        ];
+        $subscriptions = SubscriptionPayment::where('user_id', auth()->id())->where('payment_status', 'success')->orderBy('created_at', 'DESC')->get();
+        $curentSubscription = AgentSubscription::where('user_id', auth()->id())->first();
+        return view('agent.subscription.index', compact('title', 'links', 'subscriptions', 'curentSubscription'));
+    }
 }

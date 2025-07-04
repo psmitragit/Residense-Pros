@@ -14,8 +14,11 @@
 
 @if (!empty($msg))
     <script>
-        window.addEventListener('load', function() {
-            showToast('', "{{ $msg }}", "{{ $icon }}", 'top-end', 8000);
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                html: "{{ $msg }}",
+                icon: "{{ $icon }}"
+            })
         });
     </script>
 @endif

@@ -166,18 +166,18 @@ class AuthController extends Controller
     public function doAdminLogin(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'username' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
         if ($validation->fails()) {
             return response()->json(['success' => 0, 'errors' => $validation->errors()->toArray()]);
         }
-        $admin = User::where('role', 'admin')->where('username', $request->username)->first();
+        $admin = User::where('role', 'admin')->where('email', $request->email)->first();
         if (!$admin) {
-            return response()->json(['success' => 0, 'errors' => ['username' =>  'Credentials does not match our records.']]);
+            return response()->json(['success' => 0, 'errors' => ['email' =>  'Credentials does not match our records.']]);
         }
         if (!Hash::check($request->password, $admin->password)) {
-            return response()->json(['success' => 0, 'errors' => ['username' =>  'Credentials does not match our records.']]);
+            return response()->json(['success' => 0, 'errors' => ['email' =>  'Credentials does not match our records.']]);
         }
         Auth::guard('admin')->login($admin, $request->remember ?? false);
         return response()->json(['success' => 1, 'redirect' => route('admin.index')]);

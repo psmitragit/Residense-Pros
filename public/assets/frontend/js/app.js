@@ -239,13 +239,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function increment(id) {
   const el = document.getElementById(id);
-  el.innerText = parseInt(el.innerText) + 1;
+  let val = parseInt(el.innerText) + 1;
+  el.innerText = val;
+  $('input[name="' + id + '"]').val(val);
 }
 
 function decrement(id) {
   const el = document.getElementById(id);
   const current = parseInt(el.innerText);
-  if (current > 0) el.innerText = current - 1;
+  if (current > 0) {
+    let val = current - 1;
+    el.innerText = val;
+    $('input[name="' + id + '"]').val(val);
+  };
 }
 
 

@@ -2,8 +2,10 @@
 
 use App\Models\Country;
 use App\Models\Option;
+use App\Models\Property;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Exception\DateTimeException;
 
 function log_info($txt = 'Log Info')
@@ -359,6 +361,9 @@ if (!function_exists('is_expired')) {
     function is_expired($date)
     {
         // 0 mean not expired, 1 mean expired
+        if (empty($date)) {
+            return 1;
+        }
         try {
             $expire = !Carbon::parse($date)->endOfDay()->greaterThanOrEqualTo(now());
             return $expire ? 1 : 0;
@@ -400,5 +405,32 @@ if (!function_exists('stripe_transaction_fees')) {
         $stripe_fixed_fee = 0.30;
         $net_percentage = 1 - ($stripe_percentage_fee / 100);
         return round(($price + $stripe_fixed_fee) / $net_percentage, 2);
+    }
+}
+
+if (!function_exists('is_file_exists')) {
+    function is_file_exists($path = '')
+    {
+        try {
+            if (empty($path)) {
+                return false;
+            }
+            return Storage::disk('public')->exists($path);
+        } catch (Exception $err) {
+            return false;
+        }
+    }
+}
+
+if (!function_exists('get_agent_property_count')) {
+    function get_agent_property_count($agentId, $type)
+    {
+        return Property::where('created_by', $agentId)->where('status', $type)->where('archive', 0)->count() ?? 0;
+    }
+}
+if (!function_exists('get_agent_archived_property')) {
+    function get_agent_archived_property($agentId)
+    {
+        return Property::where('created_by', $agentId)->where('archive', 1)->count() ?? 0;
     }
 }

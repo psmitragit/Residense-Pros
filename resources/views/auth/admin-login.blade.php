@@ -27,9 +27,9 @@
                             method="POST">
                             @csrf
                             <div class="form-group">
-                                <input type="text" class="form-control rounded-left" placeholder="Username"
-                                    name="username">
-                                <span class="error text-danger username_error"></span>
+                                <input type="text" class="form-control rounded-left" placeholder="Email"
+                                    name="email">
+                                <span class="error text-danger email_error"></span>
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control rounded-left" placeholder="Password"
@@ -44,12 +44,12 @@
                                     </label>
                                 </div>
                                 <div class="w-50 text-md-right">
-                                    {{-- <a href="#">Forgot Password</a> --}}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="submit"
-                                    class="form-control btn btn-primary rounded submit px-3">Login</button>
+                                <button type="submit" class="form-control btn btn-primary rounded submit px-3">
+                                    Login
+                                </button>
                             </div>
                         </form>
                     </div>

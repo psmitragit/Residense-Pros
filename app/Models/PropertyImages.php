@@ -9,6 +9,10 @@ class PropertyImages extends Model
     protected $guarded = [];
     public function property()
     {
-        return $this->belongsTo(Propety::class);
+        return $this->belongsTo(Property::class);
+    }
+
+    public function image(){
+        return asset($this->path);
     }
 }

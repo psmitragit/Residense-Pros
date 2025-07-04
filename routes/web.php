@@ -33,11 +33,12 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/cookie-policy', 'cookiePolicy')->name('cookie.policy');
     //PROPERTIES
     Route::get('/properties', 'properties')->name('properties');
-    Route::get('/property-details/{id}', 'propertyDetails')->name('property.details');
+    Route::get('/property-details/{slug}', 'propertyDetails')->name('property.details');
 });
 
 Route::middleware('web', AgentLoggedInMiddleware::class)->controller(AgentController::class)->group(function(){
     Route::get('/add-property', 'addProperty')->name('property.add');
+    Route::get('/update-property/{id}', 'updateProperty')->name('property.update');
     Route::post('/do-add-property', 'doAddProperty')->name('agent.property.add.do');
 });
 

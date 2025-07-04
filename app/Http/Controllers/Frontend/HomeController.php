@@ -78,7 +78,7 @@ class HomeController extends Controller
         return view('frontend.propety.index', compact('title'));
     }
 
-    public function propertyDetails($id){
+    public function propertyDetails($slug){
         $title = 'Property Details';
         return view('frontend.propety.details', compact('title'));
     }

@@ -19,4 +19,11 @@ class SubscriptionPlan extends Model
             <i class="fas fa-check text-success me-2"></i>Unlimited property listing
         </li>';
     }
+
+    public function getLimit(){
+        if($this->limit == 0){
+            return 'Unlimited';
+        }
+        return $this->limit;
+    }
 }
