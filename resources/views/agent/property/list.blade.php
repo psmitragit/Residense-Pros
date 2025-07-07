@@ -41,7 +41,8 @@
                                 </a>
                             @endif
                             @if (in_array('update', $btnAction))
-                                <a href="{{ route('property.update', ['id' => $item->id]) }}" class="btn btn-success">
+                                <a href="{{ route('property.update', ['id' => $item->id]) }}" class="btn btn-success"
+                                    target="_blank">
                                     Update
                                 </a>
                             @endif
@@ -57,39 +58,42 @@
                                     Unarchive
                                 </button>
                             @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            No records found.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+                        @empty($btnAction)
+                            -
+                        @endempty
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">
+                        No records found.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 @endsection
 
 @push('js')
-    <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            $('.archiveUnarchiveProp').click(function() {
-                let action = $(this).data('action');
-                Swal.fire({
-                    title: '',
-                    text: "Are you sure you want to " + (action == 'archive' ? 'archive' :
-                        'unarchive') + " this property?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'Cancel',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = $(this).data('url');
-                    }
-                });
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $('.archiveUnarchiveProp').click(function() {
+            let action = $(this).data('action');
+            Swal.fire({
+                title: '',
+                text: "Are you sure you want to " + (action == 'archive' ? 'archive' :
+                    'unarchive') + " this property?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = $(this).data('url');
+                }
             });
         });
-    </script>
+    });
+</script>
 @endpush

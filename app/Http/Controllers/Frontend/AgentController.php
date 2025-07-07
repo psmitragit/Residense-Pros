@@ -48,47 +48,22 @@ class AgentController extends Controller
         DB::beginTransaction();
         try {
             $authUser = auth()->user();
-            $status = $request->draft == 1 ? 'draft' : 'pending';
+            $status = $request->draft == 1 ? 'draft' : 'published';
             $prices = $this->getPrices($request->price, $request->price_duration);
             $condition = $this->getCondition($request->property_condition);
             if ($status == 'draft') {
                 $msg = 'Property drafted successfully.';
             } else {
-                $msg = 'Property published successfully and need admin approval after admin approve we will notify you.';
+                if (empty($request->property_id)) {
+                    $msg = 'Property published successfully.';
+                } else {
+                    $msg = 'Property updated successfully.';
+                }
             }
-            $data = [
-                'name' => $request->property_caption ?? '-',
-                'residence_type' => $request->residential_type,
-                'property_type' => $request->residential_option,
-                'price' => $request->price,
-                'price_type' => $request->price_duration,
-                'price_per_month' => $prices['month'] ?? 0,
-                'price_per_day' => $prices['day'] ?? 0,
-                'price_per_year' => $prices['year'] ?? 0,
-                'address' => $request->address,
-                'city' => $request->city,
-                'country_id' => $request->country,
-                'state' => $request->state,
-                'zip' => $request->zip,
-                'surface' => $request->surface_area_value,
-                'surface_type' => $request->surface_area_unit,
-                'plot' => $request->plot_size_value,
-                'plot_type' => $request->plot_size_unit,
-                'bedrooms' => $request->bedrooms,
-                'bathrooms' => $request->bathrooms,
-                'condition' => $condition,
-                'property_age_min' => $request->property_age,
-                'property_age_max' => $request->property_age == null ? null : ($request->property_age + 5),
-                'property_available_month' => $request->available_month,
-                'property_available_year' => $request->available_year,
-                'description' => $request->description,
-                'created_by' => $authUser->id,
-                'status' => $status
-            ];
-            if ($status == 'pending') {
+            if ($status == 'published') {
                 $userSubscription = $authUser->subscription;
                 if (!$userSubscription || is_expired($userSubscription?->subscription_end_date ?? '') == 1) {
-                    $data['status'] = 'draft';
+                    $status = 'draft';
                     $msg = 'Property saved as draft. You don\'t have an active subscription. Please purchase one to post the property.';
                     $redirect = route('agent.subscription');
                 } else {
@@ -98,19 +73,58 @@ class AgentController extends Controller
                         $remaining = $agentPostingLimit - $agentTotalPosting;
                         // dd($agentPostingLimit, $agentTotalPosting, $remaining);
                         if ($remaining < 1) {
-                            $data['status'] = 'draft';
+                            $status = 'draft';
                             $msg = 'Property saved as draft. Your subscription allows posting ' . $agentTotalPosting . ' properties, and you have reached the limit. Please upgrade your subscription to post more.';
                         }
                     }
                 }
             }
-            $property = Property::create($data);
+            if (!empty($request->property_id)) {
+                $property = Property::where('created_by', auth()->id())->where('id', $request->property_id)->first();
+                if (!$property) {
+                    return response()->json(['success' => 0, 'msg' => 'Unauthorize.']);
+                }
+            } else {
+                $property = new Property();
+            }
+            $property->name = $request->property_caption ?? '-';
+            $property->residence_type = $request->residential_type;
+            $property->property_type = $request->residential_option;
+            $property->price = $request->price;
+            $property->price_type = $request->price_duration;
+            $property->price_per_month = $prices['month'] ?? 0;
+            $property->price_per_day = $prices['day'] ?? 0;
+            $property->price_per_year = $prices['year'] ?? 0;
+            $property->address = $request->address;
+            $property->city = $request->city;
+            $property->country_id = $request->country;
+            $property->state = $request->state;
+            $property->zip = $request->zip;
+            $property->surface = $request->surface_area_value;
+            $property->surface_type = $request->surface_area_unit;
+            $property->plot = $request->plot_size_value;
+            $property->plot_type = $request->plot_size_unit;
+            $property->bedrooms = $request->bedrooms;
+            $property->bathrooms = $request->bathrooms;
+            $property->condition = $condition;
+            $property->property_age_min = $request->property_age;
+            $property->property_age_max = $request->property_age == null ? null : ($request->property_age + 5);
+            $property->property_available_month = $request->available_month;
+            $property->property_available_year = $request->available_year;
+            $property->description = $request->description;
+            $property->created_by = $authUser->id;
+            $property->status = $status;
+            $property->save();
+
+            //INSER UPDATE OTHER THINGS
             $this->insertAmenities($request->amenities, $property->id);
             $this->insertNearby($request->nearby, $property->id, $request->distance, $request->distance_unit);
-            $this->insertPropertyImage($request->galary, $property->id, 'gallery');
-            $this->insertPropertyImage($request->floor_plan, $property->id, 'floor');
-            if ($property->status == 'pending') {
+
+            $this->insertPropertyImage($request->galary, $property->id, ($request->remove_galary_images ?? ''),  'gallery');
+            $this->insertPropertyImage($request->floor_plan, $property->id, ($request->remove_floor_images ?? ''),  'floor');
+            if ($property->status == 'published' && empty($property->published_at)) {
                 $property->submitted_at = now()->format('Y-m-d H:i:s');
+                $property->published_at  = now()->format('Y-m-d H:i:s');
                 $property->save();
                 $this->sendMailToAdminForApproval($property);
             }
@@ -217,10 +231,28 @@ class AgentController extends Controller
         return $nearbyInsertData;
     }
 
-    public function insertPropertyImage($images, $property_id, $type = 'gallery')
+    public function insertPropertyImage($images, $property_id, $removeImages = '', $type = 'gallery')
     {
         if (!in_array($type, ['gallery', 'floor'])) {
             return false;
+        }
+        if(!empty($removeImages)){
+            $img = explode(',', $removeImages);
+            foreach ($img as $key => $value) {
+                if(empty($value)){
+                    continue;
+                }
+                $propImg = PropertyImages::where('id', $value)->where('property_id', $property_id)->first();
+                if(empty($propImg)){
+                    continue;
+                }
+                $filename = basename($propImg->path);
+                $filePath = 'property/'.$filename;
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+                $propImg->delete();
+            }
         }
         if (!is_file_exists('property')) {
             Storage::disk('public')->makeDirectory('property');
@@ -267,7 +299,7 @@ class AgentController extends Controller
     public function sendMailToAdminForApproval($property)
     {
         $email = get_option('notification_email');
-        $keywords = [$property?->user?->name ?? '', $property?->name ?? '-', format_date($property->created_at), route('admin.property.pending')];
+        $keywords = [$property?->user?->name ?? '', $property?->name ?? '-', format_date($property->created_at), route('property.details', ['slug' => $property->slug])];
         Mail::to($email)->send(new SendFormattedMail(3, $keywords));
     }
 

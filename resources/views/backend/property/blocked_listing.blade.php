@@ -5,11 +5,12 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th style="width: 20%;">Name</th>
+                    <th style="width: 15%;">Name</th>
                     <th style="width: 15%;">Owner</th>
-                    <th style="width: 25%">Address</th>
+                    <th style="width: 20%">Address</th>
                     <th style="width: 20%;">Published At</th>
-                    <th style="width: 20%;" class="text-center">Action</th>
+                    <th style="width: 15%;">Blocked At</th>
+                    <th style="width: 15%;" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,20 +28,19 @@
                         <td style="width: 20%;">
                             {{ format_date($item->published_at) }}
                         </td>
+                        <td style="width: 20%;">
+                            {{ format_date($item->blocked_at) }}
+                        </td>
                         <td class="d-flex gap-2 justify-content-center align-items-center border-0">
-                            <a href="{{ route('property.details', ['slug' => $item->slug]) }}" class="btn btn-primary"
-                                target="_blank">
-                                View
-                            </a>
-                            <button class="btn btn-danger blockProperty" data-action="block"
-                                data-url="{{ route('admin.property.do.block', ['id' => $item->id]) }}">
-                                Block
+                            <button class="btn btn-primary unblockProperty" data-action="block"
+                                data-url="{{ route('admin.property.do.unblock', ['id' => $item->id]) }}">
+                                Unblock
                             </button>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">No records found</td>
+                        <td colspan="6" class="text-center">No records found</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -54,11 +54,11 @@
 @push('js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            $('.blockProperty').on('click', function() {
+            $('.unblockProperty').on('click', function() {
                 let url = $(this).data('url');
                 Swal.fire({
                     title: "Confirmation!",
-                    text: "Are you sure you want to block this property?",
+                    text: "Are you sure you want to unblock this property?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Yes",

@@ -13,7 +13,7 @@ Route::controller(DashboardController::class)->group(function () {
 Route::controller(PropertyController::class)->prefix('property')->as('property.')->group(function () {
     Route::get('/published', 'published')->name('published');
     Route::get('/drafted', 'drafted')->name('drafted');
-    Route::get('/pending', 'pending')->name('pending');
+    Route::get('/blocked', 'blocked')->name('blocked');
     Route::get('/archive', 'archive')->name('archive');
     Route::get('/archive/{id}', 'archiveProperty')->name('do.archive');
     Route::get('/unarchive/{id}', 'unarchiveProperty')->name('do.unarchive');

@@ -109,6 +109,7 @@ class SubscriptionController extends Controller
             if ($status == 'succeeded') {
                 $payment->payment_status = 'success';
                 $payment->payment_completed = now()->format('Y-m-d H:i:s');
+                $payment->subscription_end_date = now()->addDays(30)->format('Y-m-d 11:59:59');
                 $payment->save();
                 $plan = AgentSubscription::where('user_id', $authUser->id)->first();
                 if (!$plan) {

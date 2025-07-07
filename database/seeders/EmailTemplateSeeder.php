@@ -25,7 +25,9 @@ class EmailTemplateSeeder extends Seeder
                     <span style="word-break: break-all;">If the button above doesn\'t work, copy and paste this link into your browser:
                     ###URL###</span><br><br>
                     This link will expire in 24 hours.<br><br>
-                    If you didn’t create an account with us, you can safely ignore this email.',
+                    If you didn’t create an account with us, you can safely ignore this email.<br><br>
+                    Thank you,<br>
+                    Residence Pros',
                 'keywords' => '###NAME###,###URL###',
                 'created_at' => now(),
                 'updated_at' => now()
@@ -41,21 +43,23 @@ class EmailTemplateSeeder extends Seeder
                     Plan Duration: 1 Month <br>
                     Amount: ###AMOUNT###<br>
                     Plan Expire in ###END_DATE###<br>
-                    Plan benifits: ###BENIFITS###',
+                    Plan benifits: ###BENIFITS###<br><br>
+                    Thank you,<br>
+                    Residence Pros',
                 'keywords' => '###NAME###,###PLAN_NAME###,###END_DATE###,###BENIFITS###,###AMOUNT###',
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'id' => 3,
-                'subject' => 'New Property Listing Submitted for Approval',
+                'subject' => 'New Property Listing Notification',
                 'content' => 'Hello Admin,<br><br>
-                    A new property listing has been submitted by an agent and is pending your approval.<br><br>
-                    Listing Details:<br>
+                    A new property listing has just been submitted by an agent.<br><br>
+                    <strong>Listing Details:</strong><br>
                         Agent Name: ###NAME###<br>
                         Property Title: ###PROPERTY###<br>
                         Submitted On: ###DATE###<br><br>
-                    Please <a href="###URL###">click here</a> to review and approve the listing.<br><br>
+                    You can <a href="###URL###">view the listing here</a>.<br><br>
                     Thank you,<br>
                     Residence Pros',
                 'keywords' => '###NAME###,###PROPERTY###,###DATE###,###URL###',

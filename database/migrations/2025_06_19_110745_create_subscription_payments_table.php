@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2)->default(0);
             $table->enum('payment_status', ['pending', 'success', 'cancelled'])->default('pending');
             $table->dateTime('payment_completed')->nullable();
+            $table->dateTime('subscription_end_date')->nullable();
             $table->string('txn_id')->nullable();
             $table->timestamps();
         });

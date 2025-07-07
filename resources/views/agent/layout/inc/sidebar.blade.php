@@ -46,9 +46,9 @@
                                     <span class="sub-item">Drafted ({{get_agent_property_count(auth()->id(), 'draft')}})</span>
                                 </a>
                             </li>
-                            <li class="{{ request()->is('agent/property/pending') ? 'active' : '' }}">
-                                <a href="{{ route('agent.property.pending') }}">
-                                    <span class="sub-item">Pending ({{get_agent_property_count(auth()->id(), 'pending')}})</span>
+                            <li class="{{ request()->is('agent/property/blocked') ? 'active' : '' }}">
+                                <a href="{{ route('agent.property.blocked') }}">
+                                    <span class="sub-item">Blocked ({{get_agent_property_count(auth()->id(), 'blocked')}})</span>
                                 </a>
                             </li>
                             <li class="{{ request()->is('agent/property/archive') ? 'active' : '' }}">

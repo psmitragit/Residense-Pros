@@ -42,6 +42,10 @@ class OptionSeeder extends Seeder
                 [
                     'key' => 'notification_email',
                     'value' => 'democoder999@yopmail.com'
+                ],
+                [
+                    'key' => 'admin_perpage',
+                    'value' => '10'
                 ]
             ]
         );

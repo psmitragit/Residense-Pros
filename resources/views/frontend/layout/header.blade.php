@@ -68,6 +68,12 @@
                                         <span>My Dashboard</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="{{route('agent.subscription')}}">
+                                        <i class="fa-solid fa-money-check-dollar" style="font-size: 0.85rem;"></i>
+                                        <span>Subscribe a Plan</span>
+                                    </a>
+                                </li>
                             @endif
                             @if ((auth()?->user()?->role ?? '') == 'user')
                                 <li>

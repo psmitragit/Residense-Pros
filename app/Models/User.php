@@ -51,7 +51,22 @@ class User extends Authenticatable
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function subscription(){
+    public function subscription()
+    {
         return $this->hasOne(AgentSubscription::class, 'user_id', 'id');
+    }
+
+    public function active_subscription()
+    {
+        $subscription = AgentSubscription::where('user_id', $this->id)->whereDate('subscription_end_date', '>=', date('Y-m-d'))->first();
+        if(empty($subscription)){
+            return [];
+        }
+        return $subscription?->plan ?? [];
+    }
+
+    public function getTotalListing()
+    {
+        return Property::whereIn('status', ['published'])->where('created_by', $this->id)->count();
     }
 }

@@ -2,11 +2,77 @@
     background: #151a2c;
 }
 
-.error{
+.error {
     color: red;
 }
 
-.makeDisable{
-    opacity: .3;
-    cursor: no-drop;
+.makeDisable {
+    opacity: .3 !important;
+    cursor: no-drop !important;
+}
+
+.btn_disabled {
+    pointer-events: none;
+    opacity: .3 !important;
+    cursor: no-drop !important;
+}
+
+.showing_entries {
+    width: auto;
+    float: left;
+    font: 14px/18px 'helvetica_neueregular', Arial, Helvetica, sans-serif;
+    color: #555555;
+}
+
+.listings_pagination {
+    width: auto;
+    margin: 0;
+    float: right;
+}
+
+.listings_pagination ul {
+    margin: 0;
+    padding: 0;
+    float: right;
+}
+
+.listings_pagination li {
+    margin: 0;
+    padding: 0;
+    display: inline;
+    list-style: none;
+}
+
+.listings_pagination li a {
+    margin: 0;
+    padding: 6px 12px;
+    margin-left: -1px;
+    float: left;
+    border: 1px solid #d5d5d5;
+    font: 14px/18px 'helvetica_neueregular', Arial, Helvetica, sans-serif;
+    color: #1884a8;
+    text-decoration: none;
+}
+
+.listings_pagination li a:hover {
+    text-decoration: none;
+    color: #4891ce;
+    background: #eeeeee;
+}
+
+.listings_pagination li.active a {
+    text-decoration: none;
+    color: #ffffff;
+    background: #6861ce;
+    border-color: #615acc;
+    cursor: default;
+}
+
+.listings_pagination li.disabled a {
+    color: #999;
+    cursor: not-allowed;
+}
+
+.listings_pagination li.disabled a:hover {
+    background: none;
 }

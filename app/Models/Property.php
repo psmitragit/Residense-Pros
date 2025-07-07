@@ -8,8 +8,9 @@ use Spatie\Sluggable\SlugOptions;
 
 class Property extends Model
 {
+    use HasSlug;
     protected $guarded = [];
-    
+
     /**
      * Get the options for generating the slug.
      */
@@ -23,5 +24,10 @@ class Property extends Model
     public function amenities()
     {
         return $this->belongsToMany(Amenity::class, 'property_amenities', 'property_id', 'amenities_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 }

@@ -53,11 +53,12 @@ return new class extends Migration
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->nullOnUpdate();
 
-            $table->enum('status', ['draft', 'published', 'pending'])->default('draft');
+            $table->enum('status', ['draft', 'published', 'pending', 'blocked'])->default('draft');
             $table->tinyInteger('archive')->default(0)->comment('0 - not archive, 1 - archive');
 
             $table->dateTime('submitted_at')->nullable()->comment(' When a user publishes a property, its value will be set to the current date and time. This value will then be used to calculate how many properties have been listed under their current subscription.');
             $table->dateTime('published_at')->nullable();
+            $table->dateTime('blocked_at')->nullable();
             $table->timestamps();
         });
 

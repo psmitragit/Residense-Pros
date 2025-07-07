@@ -18,8 +18,7 @@
                     <label class="form-label">Residential Type *</label>
                     <select class="form-select" name="residential_type">
                         <option selected disabled>Select Type</option>
-                        <option value="Flat" {{ ($property?->residence_type ?? '') == 'Flat' ? 'selected' : '' }}>Flat
-                            {{ $property?->residence_type }} </option>
+                        <option value="Flat" {{ ($property?->residence_type ?? '') == 'Flat' ? 'selected' : '' }}>Flat</option>
                         <option value="House" {{ ($property?->residence_type ?? '') == 'House' ? 'selected' : '' }}>House
                         </option>
                         <option value="Villa" {{ ($property?->residence_type ?? '') == 'Villa' ? 'selected' : '' }}>Villa
@@ -425,9 +424,9 @@
                 <button type="button" class="button2" id="publishBtn">Publish</button>
                 <span class="error draft_error"></span>
             </div>
-            <input type="text" name="property_id" value="{{ $property?->id ?? '' }}">
-            <input type="text" name="remove_galary_images" value="">
-            <input type="text" name="remove_floor_images" value="">
+            <input type="hidden" name="property_id" value="{{ $property?->id ?? '' }}">
+            <input type="hidden" name="remove_galary_images" value="">
+            <input type="hidden" name="remove_floor_images" value="">
         </form>
     </div>
 @endsection

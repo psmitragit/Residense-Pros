@@ -36,19 +36,19 @@ class PropertyController extends Controller
         $btnAction = ['view', 'archive', 'update'];
         return view('agent.property.list', compact('title', 'links', 'properties', 'type', 'showAdd', 'btnAction'));
     }
-    public function pending()
+    public function blocked()
     {
-        $title = 'Pending Approval Properties';
+        $title = 'Blocked Properties';
         $links = [
             [
                 'name' => $title
             ]
         ];
         $type = 'pending';
-        $properties = $this->getProperty('pending');
-        $showAdd = true;
-        $btnAction = ['view', 'update'];
-        return view('agent.property.list', compact('title', 'links', 'properties', 'type', 'showAdd', 'btnAction'));
+        $properties = $this->getProperty('blocked');
+        $showAdd = false;
+        $btnAction = [];
+        return view('agent.property.list', compact('title', 'links', 'properties', 'type', 'showAdd', 'btnAction', 'showAdd'));
     }
     public function archive()
     {

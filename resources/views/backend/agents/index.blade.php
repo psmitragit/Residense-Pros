@@ -5,37 +5,32 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th style="width: 20%;">Name</th>
-                    <th style="width: 15%;">Owner</th>
-                    <th style="width: 25%">Address</th>
-                    <th style="width: 20%;">Published At</th>
-                    <th style="width: 20%;" class="text-center">Action</th>
+                    <th style="width: 15%;">Name</th>
+                    <th style="width: 15%;" class="text-center">Total listing</th>
+                    <th style="width: 20%" class="text-center">Active subscription</th>
+                    <th style="width: 25%;">Subscription end on</th>
+                    <th style="width: 25%;" class="text-center">History</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($properties as $item)
+                @forelse ($agents as $item)
                     <tr>
-                        <td style="width: 20%;">
+                        <td style="width: 15%;">
                             {{ $item->name }}
                         </td>
-                        <td style="width: 15%;">
-                            {{ $item?->user?->name ?? '' }}
+                        <td style="width: 15%;" class="text-center">
+                            {{ $item?->getTotalListing() ?? '0' }}
                         </td>
-                        <td style="width: 20%;">
-                            {{ $item?->address ?? '' }}
+                        <td style="width: 20%;" class="text-center">
+                            {!! $item?->active_subscription()?->name ?? '<span class="text-danger">No subscription</span>' !!}
                         </td>
-                        <td style="width: 20%;">
-                            {{ format_date($item->published_at) }}
+                        <td style="width: 25%;">
+                            {{ format_date($item?->subscription?->subscription_end_date ?? '') }}
                         </td>
-                        <td class="d-flex gap-2 justify-content-center align-items-center border-0">
-                            <a href="{{ route('property.details', ['slug' => $item->slug]) }}" class="btn btn-primary"
-                                target="_blank">
-                                View
+                        <td style="width: 100%;" class="d-flex border-0 justify-content-center">
+                            <a href="{{route('admin.agent.purchase.history', ['id'=> $item->id])}}" class="btn btn-primary">
+                                Subscription History
                             </a>
-                            <button class="btn btn-danger blockProperty" data-action="block"
-                                data-url="{{ route('admin.property.do.block', ['id' => $item->id]) }}">
-                                Block
-                            </button>
                         </td>
                     </tr>
                 @empty
@@ -45,8 +40,8 @@
                 @endforelse
             </tbody>
         </table>
-        @if ($properties->lastPage() > 1)
-            @include('backend.layout.inc.paginate', ['item' => $properties])
+        @if ($agents->lastPage() > 1)
+            @include('backend.layout.inc.paginate', ['item' => $agents])
         @endif
     </div>
 @endsection
@@ -69,7 +64,6 @@
                     }
                 });
             });
-
         })
     </script>
 @endpush
