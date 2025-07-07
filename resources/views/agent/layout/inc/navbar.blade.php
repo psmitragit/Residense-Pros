@@ -64,7 +64,7 @@
                                             class="avatar-img rounded">
                                     </div>
                                     <div class="u-text">
-                                        <h4>{{ auth('admin')->user()?->name ?? '' }}</h4>
+                                        <h4>{{ auth()->user()?->name ?? '' }}</h4>
                                         <p class="text-muted">{{ auth()->user()?->email ?? '' }}</p>
                                     </div>
                                 </div>

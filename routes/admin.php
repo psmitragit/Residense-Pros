@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/edit-profile', 'editProfile')->name('edit.profile');
+    Route::post('/do-edit-profile', 'doEditProfile')->name('profile.do-edit');
 });
 
 Route::controller(BlogController::class)->prefix('blogs')->as('blog.')->group(function () {
@@ -38,6 +40,7 @@ Route::controller(AgentController::class)->prefix('agent')->as('agent.')->group(
     Route::get('/', 'index')->name('index');
     Route::get('/history/{id}', 'purchaseHistory')->name('purchase.history');
 });
+
 Route::controller(SubscriptionController::class)->prefix('subscription')->as('subscription.')->group(function(){
     Route::get('/', 'index')->name('index');
     Route::post('/save', 'save')->name('save');
