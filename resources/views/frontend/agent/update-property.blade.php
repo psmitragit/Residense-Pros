@@ -56,7 +56,7 @@
                                 value="{{ $property?->price ?? '' }}">
                             <span class="error price_error"></span>
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6 {{ $property?->property_type == 'rent' ? '' : 'd-none'}}" id="residential_option">
                             <select class="form-select" name="price_duration">
                                 <option value="month" {{ ($property?->price_type ?? '') == 'month' ? 'selected' : '' }}>
                                     Month</option>
@@ -557,6 +557,14 @@
                     if(maxFloorImageLength > 10){
                         maxFloorImageLength = 10;
                     }
+                }
+            });
+
+            $('input[name="residential_option"]').on('change', function(){
+                if($(this).val() == 'rent'){
+                    $('#price_type_wrapper').removeClass('d-none');
+                }else{
+                    $('#price_type_wrapper').addClass('d-none');
                 }
             });
         });

@@ -739,9 +739,10 @@ body.shrink-logo header.fixed-top {
 }
 
 .flag-icon {
-  width: 20px;
-  height: auto;
-  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .property-fav .fa-solid.fa-heart {
@@ -784,9 +785,14 @@ body.shrink-logo header.fixed-top {
   color: var(--white);
 }
 
-.flag-icon {
-  width: 30px;
-  height: auto;
+.custom-pagination .disabled-pagination-link span {
+  font-size: 17px;
+  padding: 6px 15px !important;
+  border-radius: 15px !important;
+}
+
+.custom-pagination li.previous {
+  border-radius: 15px !important;
 }
 
 .property-price {
@@ -906,10 +912,15 @@ body.shrink-logo header.fixed-top {
   color: var(--gray);
 }
 
-.custom-card-title {
+.custom-card-title, .custom-card-title a {
   font-family: var(--semibold);
   font-size: clamp(16px, 3vw, 24px);
   color: #0b4b81;
+  transition: all .2s ease-in-out;
+}
+
+.custom-card-title a:hover{
+  color: #1585e3;
 }
 
 .custom-card-text {
@@ -2731,4 +2742,71 @@ input[type=number]::-webkit-outer-spin-button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.featured_properties_wrapper{
+  min-height: 720px;
+}
+
+.ad-image img {
+  height: 100%;
+  width: 100%;
+  object-fit: fill;
+}
+
+.featured_property {
+  position: relative;
+}
+
+.loader {
+  width: 65px;
+}
+
+.loader-wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  z-index: 9;
+  height: 100%;
+  align-items: center;
+  background: #00000026;
+  width: 100%;
+}
+
+.loader {
+  height: 15px;
+  aspect-ratio: 4;
+  --_g: no-repeat radial-gradient(farthest-side, #1585e3 90%, #0000);
+  background:
+    var(--_g) left,
+    var(--_g) right;
+  background-size: 25% 100%;
+  display: grid;
+}
+
+.loader:before,
+.loader:after {
+  content: "";
+  height: inherit;
+  aspect-ratio: 1;
+  grid-area: 1/1;
+  margin: auto;
+  border-radius: 50%;
+  transform-origin: -100% 50%;
+  background: #1585e3;
+  animation: l49 1s infinite linear;
+}
+
+.loader:after {
+  transform-origin: 200% 50%;
+  --s: -1;
+  animation-delay: -.5s;
+}
+
+@keyframes l49 {
+
+  58%,
+  100% {
+    transform: rotate(calc(var(--s, 1)*1turn))
+  }
 }

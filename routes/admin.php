@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Backend\AdsController;
 use App\Http\Controllers\Backend\AgentController;
 use App\Http\Controllers\Backend\BlogController;
 use App\Http\Controllers\Backend\CategoryController;
@@ -44,4 +44,11 @@ Route::controller(AgentController::class)->prefix('agent')->as('agent.')->group(
 Route::controller(SubscriptionController::class)->prefix('subscription')->as('subscription.')->group(function(){
     Route::get('/', 'index')->name('index');
     Route::post('/save', 'save')->name('save');
+});
+
+Route::controller(AdsController::class)->prefix('ads')->as('ads.')->group(function(){
+    Route::get('/position', 'position')->name('position');
+    Route::get('/revenue', 'revenue')->name('revenue');
+    Route::get('/pending', 'pending')->name('pending');
+    Route::post('/update', 'update')->name('update');
 });

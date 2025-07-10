@@ -24,4 +24,12 @@ class Blog extends Model
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
+    public function image()
+    {
+        if (!empty($this->image) && is_file_exists($this->image)) {
+            return asset($this->image);
+        }
+        return asset('assets/frontend/images/no-property-image.png');
+    }
 }

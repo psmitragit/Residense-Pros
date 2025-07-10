@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('currency_code')->nullable();
             $table->string('currency_symbol')->nullable();
             $table->enum('status', ['active', 'archive'])->nullable();
+            $table->integer('display_order')->nullable();
             $table->timestamps();
         });
     }

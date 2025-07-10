@@ -92,9 +92,15 @@ class AgentController extends Controller
             $property->property_type = $request->residential_option;
             $property->price = $request->price;
             $property->price_type = $request->price_duration;
-            $property->price_per_month = $prices['month'] ?? 0;
-            $property->price_per_day = $prices['day'] ?? 0;
-            $property->price_per_year = $prices['year'] ?? 0;
+            if($property->property_type == 'rent'){
+                $property->price_per_month = $prices['month'] ?? 0;
+                $property->price_per_day = $prices['day'] ?? 0;
+                $property->price_per_year = $prices['year'] ?? 0;
+            }else{
+                $property->price_per_month = $request->price;
+                $property->price_per_day = $request->price;
+                $property->price_per_year = $request->price;
+            }
             $property->address = $request->address;
             $property->city = $request->city;
             $property->country_id = $request->country;

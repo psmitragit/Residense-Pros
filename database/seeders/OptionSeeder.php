@@ -46,6 +46,18 @@ class OptionSeeder extends Seeder
                 [
                     'key' => 'admin_perpage',
                     'value' => '10'
+                ],
+                [
+                    'key' => 'frontend_perpage',
+                    'value' => '10'
+                ],
+                [
+                    'key' => 'homepage_title',
+                    'value' => 'Find Your Best Residence'
+                ],
+                [
+                    'key' => 'homepage_description',
+                    'value' => 'Discover your perfect home, thoughtfully designed and tailored to match your lifestyle, comfort, and aspirations for modern living.'
                 ]
             ]
         );

@@ -50,7 +50,8 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item {{ request()->route()->getName() == 'admin.agent.index' ||request()->route()->getName() == 'admin.agent.purchase.history' ? 'active' : '' }}">
+                <li
+                    class="nav-item {{ request()->route()->getName() == 'admin.agent.index' || request()->route()->getName() == 'admin.agent.purchase.history' ? 'active' : '' }}">
                     <a href="{{ route('admin.agent.index') }}">
                         <i class="fa-solid fa-user"></i>
                         <p>Agents</p>
@@ -82,6 +83,33 @@
                         <i class="fa-solid fa-money-check-dollar"></i>
                         <p>Subscriptions</p>
                     </a>
+                </li>
+                <li
+                    class="nav-item {{ request()->is('admin/ads*') ? 'active' : '' }}">
+                    <a data-bs-toggle="collapse" href="#adsMenu">
+                        <i class="fa-solid fa-audio-description"></i>
+                        <p>ADS</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse {{ request()->is('admin/ads*') ? 'show' : '' }}" id="adsMenu">
+                        <ul class="nav nav-collapse">
+                            <li class="{{ request()->is('admin/ads/position') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ads.position') }}">
+                                    <span class="sub-item">Positions</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('admin/ads/revenue') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ads.revenue') }}">
+                                    <span class="sub-item">Revenue</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('admin/ads/pending') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ads.pending') }}">
+                                    <span class="sub-item">Pending Approval (0)</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>

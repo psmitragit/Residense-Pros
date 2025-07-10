@@ -17,12 +17,7 @@
                     <label class="form-label">Residential Type *</label>
                     <select class="form-select" name="residential_type">
                         <option selected disabled>Select Type</option>
-                        <option value="Flat">Flat</option>
-                        <option value="House">House</option>
-                        <option value="Villa">Villa</option>
-                        <option value="Plot">Plot</option>
-                        <option value="Farm Land">Farm Land</option>
-                        <option value="Other">Other</option>
+                        {!!show_residence_type_dropdown()!!}
                     </select>
                     <span class="error residential_type_error"></span>
                 </div>
@@ -37,7 +32,7 @@
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="residential_option" id="rent"
-                                    value="rent">
+                                    value="rent" checked>
                                 <label class="form-check-label" for="rent">RENT</label>
                             </div>
                         </div>
@@ -49,7 +44,7 @@
                             <input type="text" class="form-control" name="price" placeholder="$">
                             <span class="error price_error"></span>
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6" id="price_type_wrapper">
                             <select class="form-select" name="price_duration">
                                 <option value="month">Month</option>
                                 <option value="day">Day</option>
@@ -418,6 +413,14 @@
                     }
                 })
             })
+
+            $('input[name="residential_option"]').on('change', function(){
+                if($(this).val() == 'rent'){
+                    $('#price_type_wrapper').removeClass('d-none');
+                }else{
+                    $('#price_type_wrapper').addClass('d-none');
+                }
+            });
         });
 
 

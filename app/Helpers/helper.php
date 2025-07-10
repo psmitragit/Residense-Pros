@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\Blog;
 use App\Models\Country;
 use App\Models\Option;
 use App\Models\Property;
 use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Exception\DateTimeException;
@@ -343,17 +345,30 @@ if (!function_exists('format_date')) {
     }
 }
 if (!function_exists('format_amount')) {
-    function format_amount($amount, $decimals = 2, $currency = '$')
+    function format_amount($amount, $decimals = 2, $currency = '$', $specialFormat = false)
     {
-        $formatted = number_format((float)$amount, $decimals, '.', ',');
-        return $currency . ' ' . $formatted;
+        if ($specialFormat) {
+            if (intval($amount) == $amount) {
+                $formatted = number_format((float)$amount, 0, '.', ',');
+            } else {
+                $formatted = number_format((float)$amount, $decimals, '.', ',');
+            }
+        } else {
+            $formatted = number_format((float)$amount, $decimals, '.', ',');
+        }
+
+        return $currency . $formatted;
     }
 }
 
 if (!function_exists('all_active_countries')) {
-    function all_active_countries()
+    function all_active_countries($activeProperty = 0)
     {
-        return Country::where('status', 1)->get();
+        $country = Country::select('countries.id', 'countries.name', 'countries.display_order')->where('countries.status', 'active')->orderBy('countries.display_order', 'ASC');
+        if ($activeProperty > 0) {
+            $country->join('properties', 'properties.country_id', 'countries.id');
+        }
+        return $country->distinct()->get();
     }
 }
 
@@ -415,6 +430,7 @@ if (!function_exists('is_file_exists')) {
             if (empty($path)) {
                 return false;
             }
+            $path = str_replace('storage/', '', $path);
             return Storage::disk('public')->exists($path);
         } catch (Exception $err) {
             return false;
@@ -432,5 +448,106 @@ if (!function_exists('get_agent_archived_property')) {
     function get_agent_archived_property($agentId)
     {
         return Property::where('created_by', $agentId)->where('archive', 1)->count() ?? 0;
+    }
+}
+
+
+if (!function_exists('getProperties')) {
+    function getProperties($filter = [], $limit = false, $paginate = true)
+    {
+        if (!$limit) {
+            $limit = get_option('frontend_perpage');
+        }
+        if (!empty($filter['page'])) {
+            Paginator::currentPageResolver(function () use ($filter) {
+                return $filter['page'];
+            });
+        }
+        $properties = Property::where('archive', 0)->where('status', 'published');
+        if (!empty($filter['country'])) {
+            $properties->where('country_id', $filter['country']);
+        }
+        if (!empty($filter['city'])) {
+            $properties->whereLike('city', '%' . $filter['city'] . '%');
+        }
+        if (!empty($filter['zip'])) {
+            $properties->where('zip', cleen($filter['zip']));
+        }
+        if (!empty($filter['residence_type'])) {
+            $properties->where('residence_type', cleen($filter['residence_type']));
+        }
+        if (!empty($filter['buy_or_rent'])) {
+            $properties->where('property_type', cleen($filter['buy_or_rent']));
+        }
+        if(!empty($filter['min_price'])){
+            $properties->where('price_per_month', '>=', $filter['min_price']);
+        }
+        if(!empty($filter['max_price'])){
+            $properties->where('price_per_month', '<=', $filter['max_price']);
+        }
+        return !$paginate ? $properties->get() : $properties->paginate($limit);
+    }
+}
+if (!function_exists('getBlogs')) {
+    function getBlogs($filter = [], $limit = false, $paginate = true)
+    {
+        if (!$limit) {
+            $limit = get_option('frontend_perpage');
+        }
+        if (!empty($filter['page'])) {
+            Paginator::currentPageResolver(function () use ($filter) {
+                return $filter['page'];
+            });
+        }
+        $blogs = Blog::where('status', '1')->whereDate('published_at', '<=', date('Y-m-d'))->orderBy('published_at', 'DESC');
+        return !$paginate ? $blogs->get() : $blogs->paginate($limit);
+    }
+}
+
+if (!function_exists('get_country_code')) {
+    function get_country_code($id)
+    {
+        return Country::find($id)?->name ?? '-';
+    }
+}
+
+if (!function_exists('norecords')) {
+    function norecords()
+    {
+        $html = '<div class="mb-5 d-flex justify-content-center align-items-center"><img src=' . asset('assets/frontend/images/no_records_found.png') . ' class="img-fluid"></div>';
+        return $html;
+    }
+}
+
+if (!function_exists('string_limit')) {
+    function string_limit($txt, $limit = 10, $ending = '...')
+    {
+        if (strlen($txt) <= $limit) {
+            return $txt;
+        }
+        return substr($txt, 0, $limit) . $ending;
+    }
+}
+
+if (!function_exists('show_residence_type_dropdown')) {
+    function show_residence_type_dropdown($selectedVal = '')
+    {
+        return '
+        <option ' . ($selectedVal == "Flat" ? 'selected' : '') . ' value="Flat">Flat</ option>
+        <option ' . ($selectedVal == "House" ? 'selected' : '') . ' value="House">House</option>
+        <option ' . ($selectedVal == "Villa" ? 'selected' : '') . ' value="Villa">Villa</option>
+        <option ' . ($selectedVal == "Plot" ? 'selected' : '') . ' value="Plot">Plot</option>
+        <option ' . ($selectedVal == "Farm Land" ? 'selected' : '') . ' value="Farm Land">Farm Land</option>
+        <option ' . ($selectedVal == "Other" ? 'selected' : '') . ' value="Other">Other</option>';
+    }
+}
+
+if(!function_exists('cleen')){
+    function cleen($txt, $lower = false){
+        if($lower){
+            return strtolower(trim($txt));
+        }else{
+            return trim($txt);
+        }
     }
 }

@@ -30,4 +30,48 @@ class Property extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id', 'id');
+    }
+
+    public function getFeaturedImage()
+    {
+        $image = PropertyImages::where('property_id', $this->id)->where('file_for', 'gallery')->orderBy('created_at', 'ASC')->first();
+        if ($image && is_file_exists($image->path)) {
+            return asset($image->path);
+        }
+        return asset('assets/frontend/images/no-property-image.png');
+    }
+
+    public function getCountryFlag()
+    {
+        return '<img src="' . asset('assets/frontend/images/flags/' . strtolower($this->country?->code2 ?? '')) . '.svg" class="flag-icon ms-1" alt="' . ($this->country?->name ?? '') . ' Flag">';
+    }
+
+    public function getFullAddressAttribute()
+    {
+        $data = [];
+        if (!empty($this->address)) {
+            $data[] = $this->address;
+        }
+        if (!empty($this->state)) {
+            $data[] = $this->state;
+        }
+        if (!empty($this->city)) {
+            $data[] = $this->city;
+        }
+        if (!empty($this->zip)) {
+            $data[] = $this->zip;
+        }
+        return implode(', ', $data);
+    }
+
+    public function getWhatsappUrlAttribute()
+    {
+        $message = 'Hi ' . ($this?->user?->name ?? '') . ', I\'m reaching out regarding your property "' . $this->name . '" listed on ' . get_option('site_title') . '. Could you please provide more details about it?';
+        $phone = str_replace(['+', ' ', '-'], ['', '', ''], $this?->user?->phone ?? '');
+        return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
+    }
 }

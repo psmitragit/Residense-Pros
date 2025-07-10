@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Frontend\AgentController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Middleware\AgentLoggedInMiddleware;
+use App\Models\Country;
+use App\Models\Property;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->as('auth.')->group(function () {
@@ -23,10 +25,11 @@ Route::get('reset-password/{token}', [AuthController::class, 'resetPassword'])->
 Route::post('do-reset-password', [AuthController::class, 'doResetPassword'])->name('do.password.reset');
 
 Route::controller(HomeController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
+    Route::match(['get', 'post'], '/',  'index')->name('index');
     Route::get('/about', 'about')->name('about');
     Route::get('/faqs', 'faqs')->name('faq');
     Route::get('/blogs', 'blogs')->name('blogs');
+    Route::get('/blog/{slug}', 'blogDetails')->name('blog.details');
     Route::get('/contact-us', 'contact')->name('contact');
     Route::get('/terms-and-condition', 'termsAndCondition')->name('terms');
     Route::get('/privecy-policy', 'privectyPolicy')->name('privacy');

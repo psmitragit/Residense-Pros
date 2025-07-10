@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('published_at')->nullable();
             $table->string('image')->nullable();
             $table->string('author')->nullable();
+            $table->enum('status', [1, 0])->default(1)->comment('1 for active, 0 for inactive');
             $table->timestamps();
         });
     }

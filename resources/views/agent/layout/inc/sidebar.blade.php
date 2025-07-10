@@ -59,6 +59,30 @@
                         </ul>
                     </div>
                 </li>
+                <li
+                class="nav-item {{ request()->is('agent/ads*') ? 'active' : '' }}">
+                <a data-bs-toggle="collapse" href="#adsMenu">
+                    <i class="fa-solid fa-audio-description"></i>
+                    <p>ADS</p>
+                    <span class="caret"></span>
+                </a>
+                <div class="collapse {{ request()->is('agent/ads*') ? 'show' : '' }}" id="adsMenu">
+                    <ul class="nav nav-collapse">
+                        <li class="{{ request()->is('agent/ads/all') ? 'active' : '' }}">
+                            <a href="{{ route('agent.ads.all') }}">
+                                <span class="sub-item">All Ads</span>
+                            </a>
+                        </li>
+                        <li class="{{ request()->is('agent/ads/add') ? 'active' : '' }}">
+                            <a href="{{ route('agent.ads.add') }}">
+                                <span class="sub-item">
+                                    Add New Ad
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
                 <li class="nav-item {{ request()->route()->getName() == 'agent.subscription.index' ? 'active' : '' }}">
                     <a href="{{ route('agent.subscription.index') }}">
                         <i class="fa-solid fa-money-check-dollar"></i>
