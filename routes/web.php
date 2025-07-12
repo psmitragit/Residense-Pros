@@ -34,19 +34,27 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/terms-and-condition', 'termsAndCondition')->name('terms');
     Route::get('/privecy-policy', 'privectyPolicy')->name('privacy');
     Route::get('/cookie-policy', 'cookiePolicy')->name('cookie.policy');
+    Route::post('/do-enquiry', 'doEnquiry')->name('do.enquiry');
+    Route::post('/add-remove-fev', 'addRemoveFevorit')->name('property.add-remove-fev');
+    Route::post('/notify-me', 'doNotifyMe')->name('do.notify.me');
+    Route::post('/do-contact', 'doContact')->name('do.contact');
     //PROPERTIES
-    Route::get('/properties', 'properties')->name('properties');
+    Route::match(['get', 'post'], '/properties', 'properties')->name('properties');
     Route::get('/property-details/{slug}', 'propertyDetails')->name('property.details');
 });
 
-Route::middleware('web', AgentLoggedInMiddleware::class)->controller(AgentController::class)->group(function(){
+Route::middleware('web', AgentLoggedInMiddleware::class)->controller(AgentController::class)->group(function () {
     Route::get('/add-property', 'addProperty')->name('property.add');
     Route::get('/update-property/{id}', 'updateProperty')->name('property.update');
     Route::post('/do-add-property', 'doAddProperty')->name('agent.property.add.do');
 });
 
-Route::controller(SubscriptionController::class)->group(function(){
+Route::controller(SubscriptionController::class)->group(function () {
     Route::get('agent/subscription', 'subscription')->name('agent.subscription');
     Route::get('/subscription/thank-you/{id}', 'thankYou')->name('subscription.thank.you');
     Route::post('/subscription/create-payment', 'createPayment')->name('subscription.create.payment');
 });
+
+Route::get('update-property-count/{id}', function ($id) {
+    return updatePropertyCount($id);
+})->name('update.property.count');

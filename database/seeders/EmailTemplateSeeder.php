@@ -65,6 +65,41 @@ class EmailTemplateSeeder extends Seeder
                 'keywords' => '###NAME###,###PROPERTY###,###DATE###,###URL###',
                 'created_at' => now(),
                 'updated_at' => now()
+            ],
+            [
+                'id' => 4,
+                'subject' => 'Hello ###AGENT_NAME###, you have a new enquiry for ###PROPERTY###',
+                'content' => 'Hello ###AGENT_NAME###,<br><br>
+                        You have received a new enquiry for your property listing:<br><br>
+                        <strong>Property:</strong> ###PROPERTY###<br>
+                        <strong>Enquiry Date:</strong> ###DATE###<br><br>
+                        <strong>Enquirer\'s Details:</strong><br>
+                        Name: ###USER_NAME###<br>
+                        Email: ###USER_EMAIL###<br>
+                        Phone: ###USER_PHONE###<br>
+                        Message: <br>
+                        <i>###USER_MESSAGE###</i><br><br>
+                        Best regards,<br>
+                        Residence Pros',
+                'keywords' => '###AGENT_NAME###,###PROPERTY###,###DATE###,###USER_NAME###,###USER_EMAIL###,###USER_PHONE###,###USER_MESSAGE###',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'id' => 5,
+                'subject' => 'New Contact Us Enquiry from ###NAME###',
+                'content' => 'Hello Admin,<br><br>
+                    You\'ve received a new enquiry from the website contact form. Here are the details:<br>
+                       Name: ###NAME###<br>
+                       Email: ###EMAIL###<br>
+                       Phone: ###PHONE###<br>
+                       Message: <br>
+                       <i>###MESSAGE###</i><br><br>
+                    Thank you,<br>
+                    Residence Pros',
+                'keywords' => '###NAME###,###EMAIL###,###PHONE###,###MESSAGE###',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ]);
     }

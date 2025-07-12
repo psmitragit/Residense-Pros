@@ -51,6 +51,11 @@ return new class extends Migration
 
             $table->text('description')->nullable();
 
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
+
+            $table->string('residence_type')->nullable();
+
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->nullOnUpdate();
 
             $table->enum('status', ['draft', 'published', 'pending', 'blocked'])->default('draft');

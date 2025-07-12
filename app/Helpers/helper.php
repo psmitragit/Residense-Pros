@@ -4,8 +4,12 @@ use App\Models\Blog;
 use App\Models\Country;
 use App\Models\Option;
 use App\Models\Property;
+use App\Models\PropertyView;
+use App\Models\User;
+use App\Models\UserFevorit;
 use Carbon\Carbon;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Exception\DateTimeException;
@@ -479,15 +483,72 @@ if (!function_exists('getProperties')) {
         if (!empty($filter['buy_or_rent'])) {
             $properties->where('property_type', cleen($filter['buy_or_rent']));
         }
-        if(!empty($filter['min_price'])){
+        if (!empty($filter['min_price'])) {
             $properties->where('price_per_month', '>=', $filter['min_price']);
         }
-        if(!empty($filter['max_price'])){
+        if (!empty($filter['max_price'])) {
             $properties->where('price_per_month', '<=', $filter['max_price']);
+        }
+        if (!empty($filter['bedrooms'])) {
+            $properties->where('bedrooms', $filter['bedrooms']);
+        }
+        if (!empty($filter['bathrooms'])) {
+            $properties->where('bathrooms', $filter['bathrooms']);
+        }
+        if (!empty($filter['sort_by'])) {
+            switch ($filter['sort_by']) {
+                case 'price_low':
+                    $properties->orderBy('price_per_month', 'ASC');
+                    break;
+                case 'price_high':
+                    $properties->orderBy('price_per_month', 'DESC');
+                    break;
+                case 'newest':
+                    $properties->orderBy('published_at', 'DESC');
+                    break;
+                case 'popularity':
+                    $properties->leftJoin('property_views', 'property_views.property_id', '=', 'properties.id')
+                        ->select('properties.*', DB::raw('COUNT(property_views.id) as property_view_count'))
+                        ->groupBy('properties.id')
+                        ->orderBy('property_view_count', 'DESC');
+                    break;
+                default:
+                    break;
+            }
         }
         return !$paginate ? $properties->get() : $properties->paginate($limit);
     }
 }
+
+if (!function_exists('countProperties')) {
+    function countProperties($filter = [])
+    {
+        $properties = Property::where('archive', 0)->where('status', 'published');
+        if (!empty($filter['country'])) {
+            $properties->where('country_id', $filter['country']);
+        }
+        if (!empty($filter['city'])) {
+            $properties->whereLike('city', '%' . $filter['city'] . '%');
+        }
+        if (!empty($filter['zip'])) {
+            $properties->where('zip', cleen($filter['zip']));
+        }
+        if (!empty($filter['residence_type'])) {
+            $properties->where('residence_type', cleen($filter['residence_type']));
+        }
+        if (!empty($filter['buy_or_rent'])) {
+            $properties->where('property_type', cleen($filter['buy_or_rent']));
+        }
+        if (!empty($filter['min_price'])) {
+            $properties->where('price_per_month', '>=', $filter['min_price']);
+        }
+        if (!empty($filter['max_price'])) {
+            $properties->where('price_per_month', '<=', $filter['max_price']);
+        }
+        return $properties->count();
+    }
+}
+
 if (!function_exists('getBlogs')) {
     function getBlogs($filter = [], $limit = false, $paginate = true)
     {
@@ -542,12 +603,40 @@ if (!function_exists('show_residence_type_dropdown')) {
     }
 }
 
-if(!function_exists('cleen')){
-    function cleen($txt, $lower = false){
-        if($lower){
+if (!function_exists('cleen')) {
+    function cleen($txt, $lower = false)
+    {
+        if ($lower) {
             return strtolower(trim($txt));
-        }else{
+        } else {
             return trim($txt);
         }
     }
+}
+
+if (!function_exists('updatePropertyCount')) {
+    function updatePropertyCount($propertyId)
+    {
+        try {
+            $content = json_decode(file_get_contents('https://api.ipify.org/?format=json'));
+            if (!empty($content->ip)) {
+                $ip = $content->ip;
+                $userId = auth()->id() ?? NULL;
+                $date = now()->format('Y-m-d');
+                PropertyView::updateOrCreate(['date' => $date, 'ip' => $ip, 'property_id' => $propertyId, 'user_id' => $userId], []);
+            }
+            return 1;
+        } catch (Exception $err) {
+            return 0;
+        }
+    }
+}
+
+function get_admin(){
+    return User::where('role', 'admin')->first();
+}
+
+function is_property_favorite($propertyId)
+{
+    return UserFevorit::where('user_id', auth()->id())->where('property_id', $propertyId)->exists();
 }

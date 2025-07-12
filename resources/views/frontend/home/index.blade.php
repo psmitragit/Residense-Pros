@@ -45,7 +45,11 @@
 
             <div class="container-fluid pt-5 card-container">
                 <div class="row g-4 px-2 px-md-5 featured_properties_wrapper" id="featured_property_{{ $key }}">
-                    @include('frontend.home.inc.listing', ['properties' => $properties, 'filter' => $filter, 'country' => $key])
+                    @include('frontend.home.inc.listing', [
+                        'properties' => $properties,
+                        'filter' => $filter,
+                        'country' => $key,
+                    ])
                 </div>
             </div>
         </section>
@@ -100,6 +104,13 @@
                             showToast('', res.msg, 'error');
                         } else {
                             $(`#featured_property_${country}`).html(res.html);
+                            setTimeout(() => {
+                                $('html, body').animate({
+                                    scrollTop: $(
+                                            `#featured_property_${country}`)
+                                        .offset().top - 200
+                                }, 500);
+                            }, 1);
                         }
                     },
                     beforeSend: function() {
@@ -127,6 +138,12 @@
                             showToast('', res.msg, 'error');
                         } else {
                             $(`#blog_list_wrapper`).html(res.html);
+                            setTimeout(() => {
+                                $('html, body').animate({
+                                    scrollTop: $(`#blog_list_wrapper`).offset()
+                                        .top - 200
+                                }, 500);
+                            }, 1);
                         }
                     },
                     beforeSend: function() {
@@ -139,6 +156,53 @@
                     }
                 });
             });
+
+            $('.property-fav').on('click', function() {
+                const icon = $(this).find('i');
+                let url = $(this).data('url');
+                let property_id = $(this).data('id');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        id: property_id
+                    },
+                    dataType: "json",
+                    success: function(res) {
+                        if (res.success == 1) {
+                            if (res.type == 'add') {
+                                makeHeart(icon);
+                            } else {
+                                removeHeart(icon);
+                            }
+                        } else {
+                            if (res.show_login_modal == 1) {
+                                $('#authModal').modal('show');
+                            } else {
+                                showSweetAlert(res.msg, '', 'error');
+                            }
+                        }
+                    }
+                });
+            });
+
+            function makeHeart(icon) {
+                icon.removeClass('fa-regular');
+                icon.addClass('fa-solid');
+                icon.addClass('heart-animate');
+                setTimeout(() => {
+                    icon.removeClass('heart-animate');
+                }, 600);
+            }
+
+            function removeHeart(icon) {
+                icon.addClass('fa-regular');
+                icon.removeClass('fa-solid');
+                icon.addClass('heart-animate');
+                setTimeout(() => {
+                    icon.removeClass('heart-animate');
+                }, 600);
+            }
         });
     </script>
 @endpush

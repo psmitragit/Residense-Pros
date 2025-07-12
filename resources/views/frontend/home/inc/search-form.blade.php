@@ -30,8 +30,8 @@
     </div>
     <div class="col-6 col-md-auto">
         @php
-        $requestedBuyOrRent = request()->buy_or_rent ?? '';
-    @endphp
+            $requestedBuyOrRent = request()->buy_or_rent ?? '';
+        @endphp
         <select class="form-select" name="buy_or_rent">
             <option value="">Buy or Rent</option>
             <option {{ $requestedBuyOrRent == 'buy' ? 'selected' : '' }} value="buy">
@@ -43,12 +43,27 @@
         </select>
     </div>
     <div class="col-6 col-md-auto">
-        <input type="number" class="form-control" placeholder="Min. Price /month" name="min_price" value="{{request()->min_price ?? ''}}">
+        <input type="number" class="form-control" placeholder="Min. Price /month" name="min_price"
+            value="{{ request()->min_price ?? '' }}">
     </div>
     <div class="col-6 col-md-auto">
-        <input type="number" class="form-control" placeholder="Max. Price /month" name="max_price" value="{{request()->max_price ?? ''}}">
+        <input type="number" class="form-control" placeholder="Max. Price /month" name="max_price"
+            value="{{ request()->max_price ?? '' }}">
     </div>
-    <div class="col-12 col-md-auto text-center">
-        <button class="button2"><i class="fas fa-search me-1"></i>SEARCH</button>
+    <div class="col-12 col-md-auto text-center d-flex gap-2 justify-content-center">
+        @if (empty($requestCountry) &&
+                empty(request()->city) &&
+                empty(request()->zip) &&
+                empty($requestedResidental) &&
+                empty($requestedBuyOrRent) &&
+                blank(request()->min_price) &&
+                blank(request()->max_price))
+            <button class="button2"><i class="fas fa-search me-1"></i>Search</button>
+        @else
+            <button class="button2"><i class="fas fa-search me-1"></i></button>
+            <a class="button2 d-inline-block" class="clear" href="{{ route('index') }}">
+                <i class="fas fa-x me-1"></i>
+            </a>
+        @endif
     </div>
 </form>

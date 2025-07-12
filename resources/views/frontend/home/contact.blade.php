@@ -50,22 +50,29 @@
 
             <div class="row justify-content-center">
                 <div class="col-md-10">
-                    <form class="contact-form">
+                    <form class="contact-form" id="contactForm" action="{{ route('do.contact') }}" method="POST">
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <input type="text" class="form-control custom-input" placeholder="First name" required>
+                                <input type="text" class="form-control custom-input" placeholder="First name"
+                                    name="first_name">
+                                <span class="error first_name_error"></span>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" class="form-control custom-input" placeholder="Last name" required>
+                                <input type="text" class="form-control custom-input" placeholder="Last name"
+                                name="last_name">
+                                <span class="error last_name_error"></span>
                             </div>
                             <div class="col-md-6">
-                                <input type="email" class="form-control custom-input" placeholder="Email" required>
+                                <input type="text" class="form-control custom-input" placeholder="Email" name="email">
+                                <span class="error email_error"></span>
                             </div>
                             <div class="col-md-6">
-                                <input type="tel" class="form-control custom-input" placeholder="Phone">
+                                <input type="tel" class="form-control custom-input" placeholder="Phone" name="phone">
+                                <span class="error phone_error"></span>
                             </div>
                             <div class="col-12">
-                                <textarea class="form-control custom-textarea" rows="5" placeholder="Message"></textarea>
+                                <textarea class="form-control custom-textarea" rows="5" placeholder="Message" name="message"></textarea>
+                                <span class="error message_error"></span>
                             </div>
                             <div class="col-12 text-center">
                                 <button type="submit" class="button2 custom-submit-btn">
@@ -80,3 +87,40 @@
         </div>
     </section>
 @endsection
+
+@push('js')
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            $('#contactForm').on('submit', function(e) {
+                e.preventDefault();
+                let formData = new FormData(e.target);
+                $.ajax({
+                    type: e.target.method,
+                    url: e.target.action,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        if(res.success == 1){
+                            showSweetAlert(res.msg, '', 'success');
+                            $('#contactForm')[0].reset();
+                        }else{
+                            if(res.errors){
+                                showValidationError(res.errors);
+                            }else{
+                                showSweetAlert(res.msg, '', 'error');
+                            }
+                        }
+                    },
+                    beforeSend: function() {
+                        $('.error').empty()
+                        $('#contactForm').find('button[type="submit"]').addClass('disabled');
+                    },
+                    complete: function() {
+                        $('#contactForm').find('button[type="submit"]').removeClass('disabled');
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

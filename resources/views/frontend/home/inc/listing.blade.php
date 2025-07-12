@@ -2,8 +2,9 @@
     <div class="col-lg-4 col-sm-6 col-12 col-5cards">
         <div class="card custom-card h-100 shadow-sm">
             <div class="property-image-wrapper position-relative">
-                <img src="{{ $item->getFeaturedImage() }}" class="card-img-top card-img" alt="Warehouse Image">
-
+                <a href="{{ route('property.details', ['slug' => $item->slug]) }}">
+                    <img src="{{ $item->getFeaturedImage() }}" class="card-img-top card-img" alt="Warehouse Image">
+                </a>
                 <div class="property-badges-wrapper">
                     @if ($item->property_type == 'rent')
                         <span class="property-badge-custom" data-badge-type="rent">Rent</span>
@@ -12,8 +13,9 @@
                         <span class="property-badge-custom" data-badge-type="new">New</span>
                     @endif
                 </div>
-                <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2 property-fav">
-                    <i class="fa-regular fa-heart"></i>
+                <button class="btn btn-light btn-sm rounded-circle position-absolute top-0 end-0 m-2 property-fav"
+                    data-url="{{ route('property.add-remove-fev') }}" data-id="{{ $item->id }}">
+                    <i class="{{ is_property_favorite($item->id) ? 'fa-solid' : 'fa-regular'}} fa-heart"></i>
                 </button>
                 <div class="property-image-overlay">
                     <p class="property-location mb-0">
@@ -81,5 +83,17 @@
 @endforelse
 
 @if ($properties->lastPage() > 1)
-    @include('frontend.home.inc.paginate', ['item' => $properties, 'params' => ['country' => $country, 'city' => $filter['city'] ?? '', 'zip' => $filter['zip'] ?? '', 'residence_type' => $filter['residence_type'] ?? '', 'buy_or_rent' => $filter['buy_or_rent'] ?? '', 'min_price' => $filter['min_price'] ?? '', 'max_price' => $filter['max_price'] ?? '']])
+    @include('frontend.home.inc.paginate', [
+        'item' => $properties,
+        'params' => [
+            'country' => $country,
+            'city' => $filter['city'] ?? '',
+            'zip' => $filter['zip'] ?? '',
+            'residence_type' => $filter['residence_type'] ?? '',
+            'buy_or_rent' => $filter['buy_or_rent'] ?? '',
+            'min_price' => $filter['min_price'] ?? '',
+            'max_price' => $filter['max_price'] ?? '',
+            'sort_by' => $filter['sort_by'] ?? '',
+        ],
+    ])
 @endif

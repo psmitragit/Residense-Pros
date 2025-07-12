@@ -154,35 +154,35 @@ $(document).ready(function () {
 
 
 // Heart icon onlick
-document.addEventListener('DOMContentLoaded', function () {
-  // Property Fav Logic
-  document.querySelectorAll('.property-fav').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const icon = this.querySelector('i');
-      toggleHeart(icon);
-    });
-  });
+// document.addEventListener('DOMContentLoaded', function () {
+//   // Property Fav Logic
+//   document.querySelectorAll('.property-fav').forEach(function (btn) {
+//     btn.addEventListener('click', function () {
+//       const icon = this.querySelector('i');
+//       toggleHeart(icon);
+//     });
+//   });
 
-  // Like Btn Logic
-  document.querySelectorAll('.like_btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const icon = this.querySelector('i');
-      toggleHeart(icon);
-    });
-  });
+//   // Like Btn Logic
+//   document.querySelectorAll('.like_btn').forEach(function (btn) {
+//     btn.addEventListener('click', function () {
+//       const icon = this.querySelector('i');
+//       toggleHeart(icon);
+//     });
+//   });
 
-  // Shared Toggle + Animation Logic
-  function toggleHeart(icon) {
-    icon.classList.toggle('fa-regular');
-    icon.classList.toggle('fa-solid');
+//   // Shared Toggle + Animation Logic
+//   function toggleHeart(icon) {
+//     icon.classList.toggle('fa-regular');
+//     icon.classList.toggle('fa-solid');
 
-    icon.classList.add('heart-animate');
+//     icon.classList.add('heart-animate');
 
-    setTimeout(() => {
-      icon.classList.remove('heart-animate');
-    }, 600);
-  }
-});
+//     setTimeout(() => {
+//       icon.classList.remove('heart-animate');
+//     }, 600);
+//   }
+// });
 
 
 // all property image should same height

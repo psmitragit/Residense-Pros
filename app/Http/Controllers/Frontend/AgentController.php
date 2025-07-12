@@ -120,6 +120,8 @@ class AgentController extends Controller
             $property->description = $request->description;
             $property->created_by = $authUser->id;
             $property->status = $status;
+            $property->lat = $request->latitude;
+            $property->lng = $request->longitude;
             $property->save();
 
             //INSER UPDATE OTHER THINGS

@@ -44,7 +44,9 @@ class AddpropertyRequest extends FormRequest
             'available_month' => [$reqOrNull, 'numeric', 'gt:0', 'lt:13'],
             'available_year' => [$reqOrNull, 'gt:2000'],
             'amenities' => [$reqOrNull],
-            'description' => [$reqOrNull, 'max:2000']
+            'description' => [$reqOrNull, 'max:2000'],
+            'latitude' => ['nullable', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
         ];
 
         if (!empty($this->nearby)) {

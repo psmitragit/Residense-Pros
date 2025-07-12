@@ -238,6 +238,24 @@
                     </div>
                 </div>
 
+                <div class="col-md-6">
+                    <div class="row g-2">
+                        <label class="form-label">Location</label>
+                        <div class="col-md-6">
+                            <input type="text" placeholder="Latitude" class="form-control" name="latitude">
+                            <span class="error latitude_error"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" placeholder="Longitude" class="form-control" name="longitude">
+                            <span class="error longitude_error"></span>
+                        </div>
+                         <a href="https://www.latlong.net/" target="_blank" style="font-size: 12px;">
+                            Click here to find your location's latitude and longitude
+                        </a>
+                    </div>                    
+                </div>
+               
+
                 <h5 class="mb-2 mt-4 form-label">Amenities *</h5>
                 <div class="row g-2 mb-4 amenities-list">
                     @foreach ($amenities as $item)

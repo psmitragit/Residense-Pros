@@ -912,14 +912,15 @@ body.shrink-logo header.fixed-top {
   color: var(--gray);
 }
 
-.custom-card-title, .custom-card-title a {
+.custom-card-title,
+.custom-card-title a {
   font-family: var(--semibold);
   font-size: clamp(16px, 3vw, 24px);
   color: #0b4b81;
   transition: all .2s ease-in-out;
 }
 
-.custom-card-title a:hover{
+.custom-card-title a:hover {
   color: #1585e3;
 }
 
@@ -2744,7 +2745,7 @@ input[type=number]::-webkit-outer-spin-button {
   justify-content: center;
 }
 
-.featured_properties_wrapper{
+.featured_properties_wrapper {
   min-height: 720px;
 }
 
@@ -2809,4 +2810,21 @@ input[type=number]::-webkit-outer-spin-button {
   100% {
     transform: rotate(calc(var(--s, 1)*1turn))
   }
+}
+
+.btn-cross-style {
+  padding: 0;
+  padding-left: 0px;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  display: flex !important;
+  padding-left: 3px;
+}
+
+.note {
+  font-size: 14px;
+  margin-top: 9px;
+  font-weight: bold;
 }
