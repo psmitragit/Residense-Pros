@@ -84,8 +84,7 @@
                         <p>Subscriptions</p>
                     </a>
                 </li>
-                <li
-                    class="nav-item {{ request()->is('admin/ads*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->is('admin/ads*') ? 'active' : '' }}">
                     <a data-bs-toggle="collapse" href="#adsMenu">
                         <i class="fa-solid fa-audio-description"></i>
                         <p>ADS</p>
@@ -110,6 +109,12 @@
                             </li>
                         </ul>
                     </div>
+                </li>
+                <li class="nav-item {{ request()->route()->getName() == 'admin.faq.index' ? 'active' : '' }}">
+                    <a href="{{ route('admin.faq.index') }}">
+                        <i class="fa-solid fa-question"></i>
+                        <p>FAQ</p>
+                    </a>
                 </li>
             </ul>
         </div>

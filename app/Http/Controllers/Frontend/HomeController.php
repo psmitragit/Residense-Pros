@@ -7,6 +7,7 @@ use App\Mail\SendFormattedMail;
 use App\Models\Amenity;
 use App\Models\Blog;
 use App\Models\EnqueryHistory;
+use App\Models\Faq;
 use App\Models\NotifyUser;
 use App\Models\Property;
 use App\Models\PropertyAmenity;
@@ -81,7 +82,8 @@ class HomeController extends Controller
                 'name' => 'FAQs'
             ]
         ];
-        return view('frontend.home.faqs', compact('title', 'links'));
+        $faq = Faq::orderBy('display_order', 'ASC')->get();
+        return view('frontend.home.faqs', compact('title', 'links', 'faq'));
     }
 
     public function contact()
