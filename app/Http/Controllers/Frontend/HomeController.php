@@ -200,11 +200,6 @@ class HomeController extends Controller
         return view('frontend.property.details', compact('title', 'updateCountUrl', 'property', 'amenities', 'propertyAmenity'));
     }
 
-    public function blogDetails($slug)
-    {
-        dd($slug);
-    }
-
     public function doEnquiry(Request $request)
     {
         $validator = Validator::make($request->all(), [

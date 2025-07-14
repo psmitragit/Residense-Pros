@@ -32,4 +32,9 @@ class Blog extends Model
         }
         return asset('assets/frontend/images/no-property-image.png');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(BlogLike::class, 'blog_id', 'id');
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Blog;
+use App\Models\BlogLike;
 use App\Models\Country;
 use App\Models\Option;
 use App\Models\Property;
@@ -578,8 +579,8 @@ if (!function_exists('getBlogs')) {
                 $date = '';
             }
             if (!empty($date)) {
-                $blogs->where(function($q) use($date, $dateObj){
-                    $q->whereDate('published_at','>=' , $date)->whereDate('published_at', '<=', $dateObj->endOfMonth()->format('Y-m-d'));
+                $blogs->where(function ($q) use ($date, $dateObj) {
+                    $q->whereDate('published_at', '>=', $date)->whereDate('published_at', '<=', $dateObj->endOfMonth()->format('Y-m-d'));
                 });
             }
         }
@@ -662,4 +663,9 @@ function get_admin()
 function is_property_favorite($propertyId)
 {
     return UserFevorit::where('user_id', auth()->id())->where('property_id', $propertyId)->exists();
+}
+
+function is_user_like_this_blog($blogId)
+{
+    return BlogLike::where('user_id', auth()->id() ?? 0)->where('blog_id', $blogId)->exists();
 }

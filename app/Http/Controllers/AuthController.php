@@ -77,7 +77,12 @@ class AuthController extends Controller
                 return response()->json(['success' => 1, 'msg' => '<span class="text-success">An email has been sent to your registered email address. Please click the link to verify it.</span>']);
             } else {
                 Auth::login($user);
-                return response()->json(['success' => 1, 'redirect' => route('index')]);
+                $redirect = route('index');                
+                if (!empty(session('login_redirect'))) {
+                    $redirect = session('login_redirect');
+                    session()->forget('login_redirect');
+                }
+                return response()->json(['success' => 1, 'redirect' => $redirect]);
             }
         } else {
             return response()->json(['success' => 0, 'errors' => ['email' => 'The credentials does not match our records.']]);
@@ -149,7 +154,7 @@ class AuthController extends Controller
             }
         );
         if ($status === Password::PASSWORD_RESET) {
-            session()->put('success' , 'Password changed successfully.');
+            session()->put('success', 'Password changed successfully.');
             return response()->json(['success' => 1, 'redirect' => route('index', ['auth_modal' => 1])]);
         }
         return response()->json(['success' => 0, 'errors' => ['email' => __($status)]]);
