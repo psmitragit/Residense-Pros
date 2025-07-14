@@ -50,7 +50,8 @@
                                 data-bs-target="#authModal">
                                 <i class="fa-regular fa-user"></i>
                             </a>
-                        @elseif(auth()->user()->role == 'agent')
+                    </li>
+                @else
                     <li class="nav-item dropdown">
                         <a href="#" class="dropdown-toggle d-flex align-items-center gap-2 agent-dropdown"
                             id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,26 +64,34 @@
                             aria-labelledby="accountDropdown">
                             @if ((auth()?->user()?->role ?? '') == 'agent')
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="{{route('agent.index')}}" target="_blank">
+                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+                                        href="{{ route('agent.index') }}" target="_blank">
                                         <i class="fa-solid fa-user-tie" style="font-size: 0.85rem;"></i>
                                         <span>My Dashboard</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="{{route('agent.subscription')}}">
+                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+                                        href="{{ route('agent.subscription') }}">
                                         <i class="fa-solid fa-money-check-dollar" style="font-size: 0.85rem;"></i>
                                         <span>Subscribe a Plan</span>
                                     </a>
                                 </li>
                             @endif
-                            @if ((auth()?->user()?->role ?? '') == 'user')
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2" href="#">
-                                        <i class="fa-regular fa-user text-primary" style="font-size: 0.85rem;"></i>
-                                        <span>My Profile</span>
-                                    </a>
-                                </li>
-                            @endif
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+                                    href="{{ route('user.edit.profile') }}">
+                                    <i class="fa-regular fa-user text-primary" style="font-size: 0.85rem;"></i>
+                                    <span>Edit Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+                                    href="{{ route('user.fevorites') }}">
+                                    <i class="fa-solid fa-heart text-primary" style="font-size: 0.85rem;"></i>
+                                    <span>My Fevorites</span>
+                                </a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider my-1">
                             </li>
@@ -94,15 +103,8 @@
                                 </a>
                             </li>
                         </ul>
-
+                        @endif
                     </li>
-                @elseif(auth()->user()->role == 'user')
-                    <a href="javascript:void(0);" class="loginbtn" data-bs-toggle="modal" data-bs-target="#authModal">
-                        <i class="fa-regular fa-user"></i>
-                    </a>
-                    @endif
-                    </li>
-
                     <li>
                         @if (!auth()->check())
                             <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#authModal">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Models\AdsPosition;
 use App\Models\AgentTempAdImageStore;
 use Illuminate\Http\Request;
@@ -62,6 +63,12 @@ class AdsController extends Controller
     public function previewAd(){
         $authUser = Auth::user();
         $tempData = AgentTempAdImageStore::where('user_id', $authUser->id)->firstOrFail();
-        return view('agent.ads.templates.'.$tempData->ad_position_id, compact('tempData'));
+
+        $output = app(HomeController::class)->index();
+
+
+        return view('agent.ads.preview', compact('output'));
+
+
     }
 }

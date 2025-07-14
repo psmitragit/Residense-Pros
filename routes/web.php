@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\AgentController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Middleware\AgentLoggedInMiddleware;
+use App\Http\Middleware\CheckUserLoggedInMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->as('auth.')->group(function () {
@@ -53,6 +54,12 @@ Route::middleware('web', AgentLoggedInMiddleware::class)->controller(AgentContro
     Route::post('/do-add-property', 'doAddProperty')->name('agent.property.add.do');
 });
 
+Route::middleware(CheckUserLoggedInMiddleware::class)->group(function () {
+    Route::get('/fevorites', [HomeController::class, 'fevorites'])->name('user.fevorites');
+    Route::get('/edit-profile', [HomeController::class, 'editProfile'])->name('user.edit.profile');
+    Route::post('/do-edit-profile', [HomeController::class, 'doEditProfile'])->name('do.edit-profile');
+});
+
 Route::controller(SubscriptionController::class)->group(function () {
     Route::get('agent/subscription', 'subscription')->name('agent.subscription');
     Route::get('/subscription/thank-you/{id}', 'thankYou')->name('subscription.thank.you');
@@ -62,3 +69,6 @@ Route::controller(SubscriptionController::class)->group(function () {
 Route::get('update-property-count/{id}', function ($id) {
     return updatePropertyCount($id);
 })->name('update.property.count');
+
+
+// Route:: 

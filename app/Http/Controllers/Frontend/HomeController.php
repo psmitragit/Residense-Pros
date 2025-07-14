@@ -134,7 +134,7 @@ class HomeController extends Controller
         }
         if (request()->ajax()) {
             $blogs = getBlogs(filter: $filter, limit: get_option('frontend_perpage'));
-            $page = 'blog';            
+            $page = 'blog';
             return response()->json(['success' => 1, 'html' => view('frontend.home.inc.listing-blogs', compact('blogs', 'page', 'params'))->render()]);
         }
         $blogs = getBlogs(filter: $filter, limit: get_option('frontend_perpage'));
@@ -143,14 +143,14 @@ class HomeController extends Controller
         $dates = [];
         $blogDates = Blog::select('published_at')->orderBy('published_at', 'DESC')->get();
         foreach ($blogDates as $key => $value) {
-            try{
+            try {
                 $dateObj = Carbon::parse($value->published_at);
                 $val = $dateObj->format('m/Y');
                 $valDate = $dateObj->format('F Y');
-            }catch(Exception $er){
+            } catch (Exception $er) {
                 $val = '';
             }
-            if(!empty($val) && !array_key_exists($val, $dates)){
+            if (!empty($val) && !array_key_exists($val, $dates)) {
                 $dates[$val] = $valDate;
             }
         }
@@ -333,5 +333,52 @@ class HomeController extends Controller
         );
         Mail::to($admin->email)->send(new SendFormattedMail(5, $keywords));
         return response()->json(['success' => 1, 'msg' => 'Question submitted successfully.']);
+    }
+
+    public function fevorites()
+    {
+        $properties = Property::select('properties.*')->join('user_fevorits', 'user_fevorits.property_id', 'properties.id')->where('user_id', auth()->id())->orderBy('user_fevorits.created_at', 'DESC')->get();
+        return view('frontend.home.favorites', compact('properties'));
+    }
+
+    public function editProfile()
+    {
+        $user = auth()->user();
+        $counties = all_active_countries();
+        return view('frontend.home.edit-profile', compact('user', 'counties'));
+    }
+
+    public function doEditProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => ['required'],
+            'last_name' => ['required'],
+            'phone' => ['required', 'numeric'],
+            'address' => ['required'],
+            'city' => ['required'],
+            'state' => ['required'],
+            'zip' => ['required'],
+            'country_id' => ['required', 'exists:countries,id']
+        ]);
+
+        if ($validator->fails()) {
+            $errors = [];
+            foreach ($validator->errors()->keys() as $fieldKey) {
+                $errors[$fieldKey] = $validator->errors()->first($fieldKey);
+            }
+            return response()->json(['success' => 0, 'errors' => $errors]);
+        }
+
+        $user = auth()->user();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->zip = $request->zip;
+        $user->country_id = $request->country_id;
+        $user->save();
+        return response()->json(['success' => 1, 'msg' => 'Profile edited successfully.']);
     }
 }

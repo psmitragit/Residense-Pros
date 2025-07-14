@@ -82,7 +82,7 @@
     {!! norecords() !!}
 @endforelse
 
-@if ($properties->lastPage() > 1)
+@if (method_exists($properties, 'lastPage') && $properties->lastPage() > 1)
     @include('frontend.home.inc.paginate', [
         'item' => $properties,
         'params' => [
