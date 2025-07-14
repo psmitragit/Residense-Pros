@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Mail\SendFormattedMail;
 use App\Models\Amenity;
 use App\Models\Blog;
+use App\Models\BlogCategory;
+use App\Models\Category;
 use App\Models\EnqueryHistory;
 use App\Models\Faq;
 use App\Models\NotifyUser;
 use App\Models\Property;
 use App\Models\PropertyAmenity;
 use App\Models\UserFevorit;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -113,7 +117,44 @@ class HomeController extends Controller
                 'name' => 'Blogs'
             ]
         ];
-        return view('frontend.home.blogs', compact('title', 'links'));
+        $filter = request()->all();
+        $params = [];
+        $selectedCategory = '';
+        $selectedDate = '';
+        if (!empty($filter['category'])) {
+            $params['category'] = $filter['category'];
+            $selectedCategory = $filter['category'];
+        }
+        if (!empty($filter['m'])) {
+            $params['m'] = $filter['m'];
+            $selectedDate = $filter['m'];
+        }
+        if (!empty($filter['keyword'])) {
+            $params['keyword'] = $filter['keyword'];
+        }
+        if (request()->ajax()) {
+            $blogs = getBlogs(filter: $filter, limit: get_option('frontend_perpage'));
+            $page = 'blog';            
+            return response()->json(['success' => 1, 'html' => view('frontend.home.inc.listing-blogs', compact('blogs', 'page', 'params'))->render()]);
+        }
+        $blogs = getBlogs(filter: $filter, limit: get_option('frontend_perpage'));
+        $latestBlogs = getBlogs(limit: 5);
+        $categories = Category::select('categories.id', 'categories.name')->join('blog_categories', 'blog_categories.category_id', 'categories.id')->groupBy('categories.id')->get();
+        $dates = [];
+        $blogDates = Blog::select('published_at')->orderBy('published_at', 'DESC')->get();
+        foreach ($blogDates as $key => $value) {
+            try{
+                $dateObj = Carbon::parse($value->published_at);
+                $val = $dateObj->format('m/Y');
+                $valDate = $dateObj->format('F Y');
+            }catch(Exception $er){
+                $val = '';
+            }
+            if(!empty($val) && !array_key_exists($val, $dates)){
+                $dates[$val] = $valDate;
+            }
+        }
+        return view('frontend.home.blogs', compact('title', 'links', 'blogs', 'latestBlogs', 'categories', 'params', 'selectedCategory', 'dates', 'selectedDate'));
     }
 
     public function properties()
@@ -289,7 +330,7 @@ class HomeController extends Controller
                     'message' => $request->message,
                     'enquery_to' => $admin->email,
                     'user_id' => $admin->id,
-                    'type' => 'contact', 
+                    'type' => 'contact',
                     'created_at' => now(),
                     'updated_at' => now()
                 ]

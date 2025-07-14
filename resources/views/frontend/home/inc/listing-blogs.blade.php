@@ -1,5 +1,5 @@
 @forelse ($blogs as $item)
-    <div class="col-lg-4 col-sm-6 col-12 col-5cards">
+    <div class="col-lg-4 col-sm-6 col-12 {{ ($page ?? '') == 'blog' ? '' : 'col-5cards' }}">
         <div class="custom-card h-100 shadow-sm rounded-4 overflow-hidden">
             <div class="custom-card-image">
                 <a href="{{ route('blog.details', ['slug' => $item->slug]) }}">
@@ -32,6 +32,6 @@
 @if ($blogs->lastPage() > 1)
     @include('frontend.home.inc.paginate', [
         'item' => $blogs,
-        'params' => [],
+        'params' => $params ?? [],
     ])
 @endif

@@ -560,7 +560,29 @@ if (!function_exists('getBlogs')) {
                 return $filter['page'];
             });
         }
-        $blogs = Blog::where('status', '1')->whereDate('published_at', '<=', date('Y-m-d'))->orderBy('published_at', 'DESC');
+        $blogs = Blog::select('blogs.*')->where('status', '1')->whereDate('published_at', '<=', date('Y-m-d'))->orderBy('published_at', 'DESC');
+        if (!empty($filter['category'])) {
+            $blogs->join('blog_categories', 'blog_categories.blog_id', 'blogs.id')->where('blog_categories.category_id', $filter['category']);
+        }
+        if (!empty($filter['keyword'])) {
+            $blogs->whereLike('name', '%' . $filter['keyword'] . '%');
+        }
+        if (!empty($filter['m'])) {
+            try {
+                $m = explode('/', $filter['m']);
+                $month = $m[0];
+                $year = $m[1];
+                $dateObj = Carbon::create($year, $month);
+                $date = $dateObj->format('Y-m-d');
+            } catch (Exception $err) {
+                $date = '';
+            }
+            if (!empty($date)) {
+                $blogs->where(function($q) use($date, $dateObj){
+                    $q->whereDate('published_at','>=' , $date)->whereDate('published_at', '<=', $dateObj->endOfMonth()->format('Y-m-d'));
+                });
+            }
+        }
         return !$paginate ? $blogs->get() : $blogs->paginate($limit);
     }
 }
@@ -632,7 +654,8 @@ if (!function_exists('updatePropertyCount')) {
     }
 }
 
-function get_admin(){
+function get_admin()
+{
     return User::where('role', 'admin')->first();
 }
 
