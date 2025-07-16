@@ -23,9 +23,9 @@
             </ul>
         </div>
     @endif
-    <div class="add-banner text-center my-5">
-        <img src="{{ asset('assets/frontend/images/300-250.png') }}" class="img-fluid shadow-sm" alt="Ad 300x250">
-    </div>
+    {{-- Blog Page Right Bar --}}
+    {!! get_ad_module(6) !!}
+    {{-- Blog Page Right Bar --}}
     <div class="mb-4 p-5 archive_section select-wrapper">
         <h4 class="mb-5 archive_heading">Archive</h4>
         <select name="m" class="form-select" onchange="this.form.submit()">
@@ -46,7 +46,7 @@
             @endforeach
         </select>
     </div>
-    <div class="add-banner text-center my-5">
-        <img src="{{ asset('assets/frontend/images/300-250.png') }}" class="img-fluid shadow-sm" alt="Ad 300x250">
-    </div>
+    {{-- Blog Page Right Bar --}}
+    {!! get_ad_module(6) !!}
+    {{-- Blog Page Right Bar --}}
 </form>

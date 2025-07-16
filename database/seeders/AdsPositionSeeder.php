@@ -42,16 +42,11 @@ class AdsPositionSeeder extends Seeder
             ],
             [
                 'id' => 6,
-                'name' => 'Blog Page Inside Blogs',
+                'name' => 'Blog Page Right Bar',
                 'price' => 1
             ],
             [
                 'id' => 7,
-                'name' => 'Blog Page After Recent Post',
-                'price' => 1
-            ],
-            [
-                'id' => 8,
                 'name' => 'Contact Us Page',
                 'price' => 1
             ]

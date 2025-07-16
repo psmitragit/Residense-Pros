@@ -100,6 +100,63 @@ class EmailTemplateSeeder extends Seeder
                 'keywords' => '###NAME###,###EMAIL###,###PHONE###,###MESSAGE###',
                 'created_at' => now(),
                 'updated_at' => now()
+            ],
+            [
+                'id' => 6,
+                'subject' => 'New Ad Pending Approval: ###AD_TITLE###',
+                'content' => 'Hello Admin,<br><br>
+                    A new ad has been submitted and is awaiting your approval. Here are the details:<br><br>
+                    Position: ###AD_TITLE###<br>
+                    Submitted By: ###AGENT_NAME###<br>
+                    Submitted On: ###DATE###<br><br>
+                    Please <a href="###APPROVAL_URL###">click here</a> to review and approve the ad to proceed with the next steps.<br><br>
+                    Thank you,<br>
+                    Residence Pros',
+                'keywords' => '###AD_TITLE###,###AGENT_NAME###,###DATE###,###APPROVAL_URL###',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'id' => 7,
+                'subject' => 'Your Ad is Now Live: ###AD_TITLE###',
+                'content' => 'Hello ###AGENT_NAME###,<br><br>
+                        Great news! Your ad "<strong>###AD_TITLE###</strong>" is now live on our website.<br><br>
+                        Live Until: <strong>###END_DATE###</strong><br>
+                        View Your Ad: <a href="###AD_URL###" target="_blank">Click Here</a><br><br>
+                        Thank you for advertising with us. If you have any questions, please feel free to contact our support team.<br><br>
+                        Best regards,<br>
+                        Residence Pros',
+                'keywords' => '###AD_TITLE###,###AGENT_NAME###,###END_DATE###,###AD_URL###',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'id' => 8,
+                'subject' => 'Your Ad is Approved: ###AD_TITLE###',
+                'content' => 'Hello ###AGENT_NAME###,<br><br>
+                        Your ad ###AD_TITLE### has been approved.<br><br>
+                        To make it live on our website, please complete the payment.<br><br>
+                        Complete Payment: <a href="###PAYMENT_URL###" target="_blank">Click Here</a><br><br>
+                        Once the payment is completed, your ad will go live immediately.<br><br>
+                        If you have any questions, feel free to reach out to our support team.<br><br>
+                        Best regards,<br>
+                        Residence Pros',
+                'keywords' => '###AD_TITLE###,###AGENT_NAME###,###PAYMENT_URL###',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'id' => 9,
+                'subject' => 'Your Ad was Rejected: ###AD_TITLE###',
+                'content' => 'Hello ###AGENT_NAME###,<br><br>
+                        We regret to inform you that your ad ###AD_TITLE### has been rejected after review.<br><br>
+                        If you believe this was a mistake or you wish to discuss it further, please contact our support team.<br><br>
+                        Thank you for your understanding.<br><br>
+                        Best regards,<br>
+                        Residence Pros',
+                'keywords' => '###AD_TITLE###,###AGENT_NAME###',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ]);
     }

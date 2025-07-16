@@ -11,6 +11,10 @@
 
 
     @foreach ($group as $key => $item)
+        {{-- Property Listing Page --}}
+        {!! get_ad_module(3) !!}
+        {{-- Property Listing Page --}}
+
         <section class="featured_property featured_poperty_wrapper" id="featured_property_list_{{ $key }}">
             <div class="loader-wrapper d-none">
                 <div class="loader"></div>

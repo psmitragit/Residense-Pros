@@ -42,7 +42,8 @@
 
 @section('content')
     <div class="container">
-        <form action="{{ route('agent.ads.save') }}" method="POST" autocomplete="off" id="addNewAddForm" enctype="multipart/form-data">
+        <form action="{{ route('agent.ads.save') }}" method="POST" autocomplete="off" id="addNewAddForm"
+            enctype="multipart/form-data">
             <div class="form-group">
                 <label for="position">Ad Position:
                     <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip"
@@ -82,13 +83,14 @@
                         Click to upload ad image
                     </p>
                 </div>
-                <input type="file" class="form-control-file d-none" id="adImageInput" accept=".jpg,.jpeg" name="adImage">
-                <span  class="error adImage_error"></span>
+                <input type="file" class="form-control-file d-none" id="adImageInput" accept=".jpg,.jpeg,.png"
+                    name="adImage">
+                <span class="error adImage_error"></span>
             </div>
 
             <div class="form-group">
                 <button class="preview btn btn-secondary me-2" type="button">Preview</button>
-                <button class="btn btn-success">Submit</button>
+                <button class="btn btn-success" id="submitBtn">Submit</button>
             </div>
         </form>
     </div>
@@ -147,9 +149,9 @@
                     processData: false,
                     success: function(res) {
                         if (res.success == 0) {
-                            if(res.errors){
+                            if (res.errors) {
                                 showValidationError(res.errors);
-                            }else{
+                            } else {
                                 showToast('', res.msg, 'error');
                             }
                         } else {
@@ -157,9 +159,40 @@
                         }
                     }
                 });
+            });
 
-
-
+            $('#addNewAddForm').on('submit', function(e) {
+                e.preventDefault();
+                $('.error').empty();
+                let formData = new FormData(e.target);
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('agent.ads.save') }}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        if (res.success == 0) {
+                            if (res.errors) {
+                                showValidationError(res.errors);
+                            } else {
+                                showToast('', res.msg, 'error');
+                            }
+                        } else {
+                            if (res.redirect) {
+                                window.location.href = res.redirect;
+                            } else {
+                                showToast('', res.msg, 'success');
+                            }
+                        }
+                    },
+                    beforeSend: function() {
+                        $('#submitBtn').addClass('btn_disabled');
+                    },
+                    complete: function() {
+                        $('#submitBtn').removeClass('btn_disabled');
+                    }
+                });
             });
         })
     </script>

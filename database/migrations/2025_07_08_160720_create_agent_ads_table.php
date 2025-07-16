@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->enum('status', ['pending_approval', 'pending_payment', 'active'])->default('pending_approval');
+            $table->enum('status', ['pending_approval', 'pending_payment', 'active', 'withdrawal', 'reject'])->default('pending_approval');
             $table->dateTime('applied_on')->nullable();
             $table->dateTime('approved_on')->nullable();
             $table->foreignId('ad_position_id')->nullable()->constrained('ads_positions')->cascadeOnUpdate()->nullOnDelete();

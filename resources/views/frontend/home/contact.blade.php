@@ -31,15 +31,9 @@
             </div>
         </div>
     </section>
-    <div class="container ">
-        <div class="row d-flex justify-content-center my-2 my-md-5">
-            <div class="add-banner adv1 my-4 text-center">
-                <a href="#" target="_blank" rel="noopener">
-                    <img src="{{ asset('assets/frontend/images/728-90.png') }}" alt="Ad Banner" class="img-fluid">
-                </a>
-            </div>
-        </div>
-    </div>
+    {{-- Contact Us Page --}}
+    {!! get_ad_module(7) !!}
+    {{-- Contact Us Page --}}
     <section class="contact-form-section py-5 px-3 px-md-0 my-lg-5">
         <div class="container">
             <div class="row justify-content-center mb-4">
@@ -59,7 +53,7 @@
                             </div>
                             <div class="col-md-6">
                                 <input type="text" class="form-control custom-input" placeholder="Last name"
-                                name="last_name">
+                                    name="last_name">
                                 <span class="error last_name_error"></span>
                             </div>
                             <div class="col-md-6">
@@ -101,13 +95,13 @@
                     contentType: false,
                     processData: false,
                     success: function(res) {
-                        if(res.success == 1){
+                        if (res.success == 1) {
                             showSweetAlert(res.msg, '', 'success');
                             $('#contactForm')[0].reset();
-                        }else{
-                            if(res.errors){
+                        } else {
+                            if (res.errors) {
                                 showValidationError(res.errors);
-                            }else{
+                            } else {
                                 showSweetAlert(res.msg, '', 'error');
                             }
                         }

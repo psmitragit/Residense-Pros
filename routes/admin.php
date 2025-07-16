@@ -51,7 +51,11 @@ Route::controller(AdsController::class)->prefix('ads')->as('ads.')->group(functi
     Route::get('/position', 'position')->name('position');
     Route::get('/revenue', 'revenue')->name('revenue');
     Route::get('/pending', 'pending')->name('pending');
+    Route::get('/pending/{id}', 'pending')->name('pending.details');
     Route::post('/update', 'update')->name('update');
+    Route::get('/reject/{id}', 'reject')->name('reject');
+    Route::get('/approve/{id}', 'approve')->name('approve');
+    Route::get('/show-details/{id}', 'showDetails')->name('show.details');
 });
 
 Route::controller(FaqController::class)->prefix('faq')->as('faq.')->group(function () {

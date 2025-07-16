@@ -1,4 +1,4 @@
-<div class="container ">
+<div class="container ad_module_1">
     <div class="row d-flex justify-content-center my-60px">
         <div class="add-banner adv1 my-4 text-center">
             <a href="#" target="_blank" rel="noopener">

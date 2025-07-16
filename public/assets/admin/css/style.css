@@ -76,3 +76,14 @@
 .listings_pagination li.disabled a:hover {
     background: none;
 }
+
+.filter-wrapper {
+    border: 1px solid #ebedf2;
+    padding: 20px !important;
+    margin-bottom: 15px;
+}
+
+.filter-wrapper select {
+    height: 41px;
+    border: 2px solid #ebedf2;
+}

@@ -1,3 +1,9 @@
- <div class="add-banner text-center my-4">
-    <img src="{{ asset('assets/frontend/images/300-250.png') }}" class="img-fluid shadow-sm" alt="Ad 300x250">
- </div>
+<div class="container ad_module_3">
+    <div class="row d-flex justify-content-center my-60px">
+        <div class="add-banner adv1 my-4 text-center">
+            <a href="#" target="_blank" rel="noopener">
+                <img src="{{ asset('assets/frontend/images/728-90.png') }}" alt="Ad Banner" class="img-fluid">
+            </a>
+        </div>
+    </div>
+</div>

@@ -292,7 +292,7 @@
                     <p class="mb-1">
                         Click to upload floor plan
                     </p>
-                    <input type="file" class="form-control-file d-none" id="floorInput" accept=".jpg,.jpeg" name="floor_plan[]" multiple>
+                    <input type="file" class="form-control-file d-none" id="floorInput" accept=".jpg,.jpeg,.png" name="floor_plan[]" multiple>
                 </div>
                 <span class="error floor_plan_error"></span>
                 <span class="error floor_plan_e_error"></span>
@@ -307,7 +307,7 @@
                     <img src="{{ asset('assets/frontend/images/upload-image.png') }}" alt="upload-image"
                         class="img-fluid">
                     <p class="mb-1">Upload property images (max 20MB)</p>
-                    <input type="file" multiple class="form-control-file d-none" id="photoInput" accept=".jpg,.jpeg"
+                    <input type="file" multiple class="form-control-file d-none" id="photoInput" accept=".jpg,.jpeg,.png"
                         name="galary[]">
                 </div>
                 <span class="error galary_error"></span>

@@ -36,12 +36,14 @@
                 <div class="col-lg-4">
                     <div class="faq-sidebar px-4">
                         <div class="add-banner mb-4">
-                            <img src="{{ asset('assets/frontend/images/300-600.png') }}" class="img-fluid shadow-sm"
-                                alt="Ad 300x600">
+                            {{-- FAQ Page First Ad --}}
+                            {!! get_ad_module(4) !!}
+                            {{-- FAQ Page First Ad --}}
                         </div>
                         <div class="add-banner">
-                            <img src="{{ asset('assets/frontend/images/300-250.png') }}" class="img-fluid shadow-sm"
-                                alt="Ad 300x250">
+                            {{-- FAQ Page Second Ad --}}
+                            {!! get_ad_module(5) !!}
+                            {{-- FAQ Page Second Ad --}}
                         </div>
                     </div>
                 </div>

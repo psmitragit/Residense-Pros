@@ -104,7 +104,7 @@
                             </li>
                             <li class="{{ request()->is('admin/ads/pending') ? 'active' : '' }}">
                                 <a href="{{ route('admin.ads.pending') }}">
-                                    <span class="sub-item">Pending Approval (0)</span>
+                                    <span class="sub-item">Pending Approval ({{get_pending_approval_ads()}})</span>
                                 </a>
                             </li>
                         </ul>

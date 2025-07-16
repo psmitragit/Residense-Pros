@@ -21,6 +21,11 @@ Route::controller(PropertyController::class)->prefix('property')->as('property.'
 
 Route::controller(AdsController::class)->prefix('ads')->as('ads.')->group(function () {
     Route::get('/all', 'all')->name('all');
+    Route::get('/withdrawal/{id}', 'withdrawal')->name('withdrawal');
+    Route::get('/pay/{id}', 'pay')->name('pay');
+    Route::post('/pay-create', 'payCreate')->name('pay.create');
+    Route::get('/thank-you/{id}', 'thankYou')->name('pay.thank.you');
+    Route::get('/preview-details/{id}', 'previewDetails')->name('preview.details');
     Route::get('/add', 'add')->name('add');
     Route::post('/save', 'save')->name('save');
     Route::post('/preview', 'preview')->name('preview');

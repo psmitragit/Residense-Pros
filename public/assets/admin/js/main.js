@@ -74,7 +74,7 @@ window.addEventListener("load", function () {
       }, closeDelay);
   };
 
-  window.showSweetAlert = (title, text = "" , icon = "success") => {
+  window.showSweetAlert = (title, text = "", icon = "success") => {
     Swal.fire({
       title: title,
       text: text,
@@ -340,3 +340,4 @@ window.addEventListener("load", function () {
     }
   };
 });
+
