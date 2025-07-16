@@ -62,6 +62,7 @@
     @include('frontend.layout.alert')
     @include('frontend.layout.signup-login-js')
     @stack('js')
+    <script src="{{ asset('assets/frontend/js/ads.js') }}"></script>
 </body>
 
 </html>

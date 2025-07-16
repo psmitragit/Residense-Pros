@@ -66,6 +66,31 @@ class AgentAd extends Model
 
     public function liveUrl()
     {
-        return route('index');
+        switch ($this->ad_position_id) {
+            case '1':
+                return route('index');
+                break;
+            case '2':
+                return route('index');
+                break;
+            case '3':
+                return route('properties');
+                break;
+            case '4':
+                return route('faq');
+                break;
+            case '5':
+                return route('faq');
+                break;
+            case '6':
+                return route('blogs');
+                break;
+            case '7':
+                return route('contact');
+                break;
+            default:
+                return route('index');
+                break;
+        }
     }
 }

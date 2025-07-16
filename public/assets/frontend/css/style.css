@@ -629,11 +629,15 @@ body.shrink-logo header.fixed-top {
   border-radius: 12px;
 }
 
-.adv1 {
+/* .adv1 {
   width: 728px;
   height: 90px;
-}
+} */
 
+.adv1 img{
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
 
 .prop_heading {
   font-family: var(--bold);
@@ -2842,6 +2846,10 @@ input[type=number]::-webkit-outer-spin-button {
   border-radius: 50%;
 }
 
-.comments-list li{
+.comments-list li {
   list-style-type: none;
+}
+
+.ad_module .slick-slide img{
+  margin: auto !important;
 }

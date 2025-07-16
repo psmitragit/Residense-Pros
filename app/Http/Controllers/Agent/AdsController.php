@@ -69,7 +69,7 @@ class AdsController extends Controller
                 'ad_url' => ['required', 'url'],
                 'adImage' => ['required', 'mimes:jpg,jpeg,png']
             ], [
-                'duration.integer' => 'Amount must be a whole number'
+                'duration.integer' => 'Duration must be a whole number'
             ]);
             if ($validator->fails()) {
                 return response()->json(['success' => 0, 'errors' => $validator->errors()->toArray()]);

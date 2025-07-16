@@ -56,7 +56,7 @@
             </div>
 
             <div class="container-fluid pt-5 card-container">
-                <div class="row g-4 px-2 px-md-5" id="featured_property_{{ $key }}">
+                <div class="row g-4 px-2 px-md-5 pb-5" id="featured_property_{{ $key }}">
                     @include('frontend.home.inc.listing', [
                         'properties' => $item['data'],
                         'filter' => $filter,

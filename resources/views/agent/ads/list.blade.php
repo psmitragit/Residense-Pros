@@ -9,17 +9,10 @@
             font-size: 26px;
         }
 
-        .swal2-image-custom {
-            max-width: 90%;
-            height: auto !important;
-        }
-
-        .swal2-popup.swal2-modal.swal2-show {
-            width: 80%
-        }
-
-        .swal2-icon-warning.swal2-popup.swal2-modal.swal2-show{
-            width: auto !important;
+        .ads_image {
+            display: flex;
+            justify-content: center;
+            padding: 15px 0px;
         }
     </style>
 @endpush
