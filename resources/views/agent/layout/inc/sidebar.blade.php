@@ -21,7 +21,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item {{ request()->route()->getName() == 'agent.index' ? 'active' : '' }}">
+                <li class="nav-item {{ (request()?->route()?->getName() ?? '') == 'agent.index' ? 'active' : '' }}">
                     <a href="{{ route('agent.index') }}">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
@@ -59,7 +59,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item {{ request()->route()->getName() == 'agent.enquiry.index' ? 'active' : '' }}">
+                <li class="nav-item {{ (request()?->route()?->getName() ?? '') == 'agent.enquiry.index' ? 'active' : '' }}">
                     <a href="{{ route('agent.enquiry.index') }}">
                         <i class="fas fa-question-circle"></i>
                         <p>Enquiry</p>
@@ -89,7 +89,7 @@
                     </ul>
                 </div>
             </li>
-                <li class="nav-item {{ request()->route()->getName() == 'agent.subscription.index' ? 'active' : '' }}">
+                <li class="nav-item {{ (request()?->route()?->getName() ?? '') == 'agent.subscription.index' ? 'active' : '' }}">
                     <a href="{{ route('agent.subscription.index') }}">
                         <i class="fa-solid fa-money-check-dollar"></i>
                         <p>Subscription</p>

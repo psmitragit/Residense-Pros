@@ -157,6 +157,19 @@ class EmailTemplateSeeder extends Seeder
                 'keywords' => '###AD_TITLE###,###AGENT_NAME###',
                 'created_at' => now(),
                 'updated_at' => now()
+            ],
+            [
+                'id' => 10,
+                'subject' => 'New Property Listed: ###PROPERTY_NAME###',
+                'content' => 'Hello user,<br><br>
+                        We wanted to let you know that ###AGENT_NAME### has just listed a new property: ###PROPERTY_NAME###.<br><br>
+                        You can view the property details here:<br>
+                        <a href="###PROPERTY_URL###" target="_blank">Click to View Property</a><br><br>
+                        Best regards,<br>
+                        Residence Pros',
+                'keywords' => '###PROPERTY_NAME###,###AGENT_NAME###,###PROPERTY_URL###',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ]);
     }

@@ -50,37 +50,37 @@
                 <ul class="list-unstyled footer-links">
                     <li>
                         <a href="{{ route('index') }}"
-                            class="navA {{ request()->route()->getName() == 'index' ? 'active' : '' }}">
+                            class="navA {{ (request()?->route()?->getName() ?? '') == 'index' ? 'active' : '' }}">
                             Home
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('about') }}"
-                            class="navA {{ request()->route()->getName() == 'about' ? 'active' : '' }}">
+                            class="navA {{ (request()?->route()?->getName() ?? '') == 'about' ? 'active' : '' }}">
                             About Us
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('properties') }}"
-                            class="navA {{ request()->route()->getName() == 'properties' || request()->route()->getName() == 'property.details' ? 'active' : '' }}">
+                            class="navA {{ (request()?->route()?->getName() ?? '') == 'properties' || (request()?->route()?->getName() ?? '') == 'property.details' ? 'active' : '' }}">
                             Properties
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('faq') }}"
-                            class="navA {{ request()->route()->getName() == 'faq' ? 'active' : '' }}">
+                            class="navA {{ (request()?->route()?->getName() ?? '') == 'faq' ? 'active' : '' }}">
                             FAQs
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('blogs') }}"
-                            class="navA {{ request()->route()->getName() == 'blogs' ? 'active' : '' }}">
+                            class="navA {{ (request()?->route()?->getName() ?? '') == 'blogs' ? 'active' : '' }}">
                             Blog
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('contact') }}"
-                            class="navA {{ request()->route()->getName() == 'contact' ? 'active' : '' }}">
+                            class="navA {{ (request()?->route()?->getName() ?? '') == 'contact' ? 'active' : '' }}">
                             Contact Us
                         </a>
                     </li>

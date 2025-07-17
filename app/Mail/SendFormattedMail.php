@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendFormattedMail extends Mailable
+class SendFormattedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $subject, $content, $attachments;

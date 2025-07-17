@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\AddpropertyRequest;
 use App\Mail\SendFormattedMail;
+use App\Mail\SendMail;
 use App\Models\Amenity;
+use App\Models\NotifyUser;
 use App\Models\Property;
 use App\Models\PropertyAmenity;
 use App\Models\PropertyImages;
@@ -92,11 +94,11 @@ class AgentController extends Controller
             $property->property_type = $request->residential_option;
             $property->price = $request->price;
             $property->price_type = $request->price_duration;
-            if($property->property_type == 'rent'){
+            if ($property->property_type == 'rent') {
                 $property->price_per_month = $prices['month'] ?? 0;
                 $property->price_per_day = $prices['day'] ?? 0;
                 $property->price_per_year = $prices['year'] ?? 0;
-            }else{
+            } else {
                 $property->price_per_month = $request->price;
                 $property->price_per_day = $request->price;
                 $property->price_per_year = $request->price;
@@ -135,6 +137,8 @@ class AgentController extends Controller
                 $property->published_at  = now()->format('Y-m-d H:i:s');
                 $property->save();
                 $this->sendMailToAdminForApproval($property);
+                //CHECK FOR ANY NORIFY USER AND SEND MAIL
+                $this->sendNotifyMail($property);
             }
             DB::commit();
             session()->put('success', $msg);
@@ -143,6 +147,15 @@ class AgentController extends Controller
         } catch (Exception $err) {
             DB::rollback();
             return response()->json(['success' => 0, 'msg' => $err->getMessage()]);
+        }
+    }
+
+    public function sendNotifyMail($property)
+    {
+        $notifyUsers = NotifyUser::where('agent_id', auth()->id())->get();
+        $keywords = [$property?->name ?? '', $property?->user?->name ?? '', route('property.details', ['slug' => $property?->slug ?? ''])];
+        foreach ($notifyUsers as $value) {
+            Mail::to($value->email)->queue(new SendFormattedMail(10, $keywords));
         }
     }
 
@@ -244,18 +257,18 @@ class AgentController extends Controller
         if (!in_array($type, ['gallery', 'floor'])) {
             return false;
         }
-        if(!empty($removeImages)){
+        if (!empty($removeImages)) {
             $img = explode(',', $removeImages);
             foreach ($img as $key => $value) {
-                if(empty($value)){
+                if (empty($value)) {
                     continue;
                 }
                 $propImg = PropertyImages::where('id', $value)->where('property_id', $property_id)->first();
-                if(empty($propImg)){
+                if (empty($propImg)) {
                     continue;
                 }
                 $filename = basename($propImg->path);
-                $filePath = 'property/'.$filename;
+                $filePath = 'property/' . $filename;
                 if (Storage::disk('public')->exists($filePath)) {
                     Storage::disk('public')->delete($filePath);
                 }
@@ -269,32 +282,16 @@ class AgentController extends Controller
             $insertData = [];
             foreach ($images as $key => $value) {
                 if (!empty($value)) {
-                    $res = image_resize($value, 'property');
-                    if ($res) {
-                        $final_crop_data = [
-                            'top' => 0,
-                            'left' => 0,
-                            'right' => 0,
-                            'bottom' => 0,
-                            'image' => $res['resizedimg'],
-                            'maxWidth' => $res['maxWidth'],
-                            'maxHeight' => $res['maxHeight'],
-                            'dirPath' => $res['dir_path'],
-                            'thumbFileName' => $res['thumbFileName'],
-                            'ext' => $res['ext'],
-                            'crop_image' => 1,
-                        ];
-                        $imageName = final_crop($final_crop_data);
-                        image_resize($value, 'property/small', 200, 200, $imageName);
-                        $insertData[] = [
-                            'path' => 'storage/property/' . $imageName,
-                            'file_type' => 'image',
-                            'file_for' => $type,
-                            'property_id' => $property_id,
-                            'created_at' => now(),
-                            'updated_at' => now()
-                        ];
-                    }
+                    $imageName = 'IMG_' . uniqid() . '.' . $value->getClientOriginalExtension();
+                    $value->move(public_path('storage/property'), $imageName);
+                    $insertData[] = [
+                        'path' => 'storage/property/' . $imageName,
+                        'file_type' => 'image',
+                        'file_for' => $type,
+                        'property_id' => $property_id,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ];
                 }
             }
             if (!empty($insertData)) {

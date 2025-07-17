@@ -201,7 +201,7 @@ class AdsController extends Controller
             $ads->whereDate('agent_ad_payments.payment_completed', '>=', date('Y-m-d 00:00:00', strtotime(request()->payment_date_from)));
         }
         if (!empty(request()->payment_date_to)) {
-            $ads->whereDate('agent_ad_payments.payment_completed', '<=', date('Y-m-d 11:59:59', strtotime(request()->payment_date_to)));
+            $ads->whereDate('agent_ad_payments.payment_completed', '<=', date('Y-m-d 23:59:59', strtotime(request()->payment_date_to)));
         }
         $ads = $ads->paginate(get_option('admin_perpage'));
         return view('backend.ads.revenue', compact('title', 'links', 'ads', 'selectedPostion', 'selectedAgent', 'positions', 'agents', 'statuses', 'selectedStatus', 'totalRevenue'));
@@ -211,10 +211,10 @@ class AdsController extends Controller
     {
         $revenue = AgentAdPayment::select(DB::raw('SUM(amount) as amount'))->where('payment_status', 'success');
         if (!empty($request['payment_date_from'])) {
-            $revenue->whereDate('payment_completed', '<=', date('Y-m-d 11:59:59', strtotime($request['payment_date_from'])));
+            $revenue->whereDate('payment_completed', '<=', date('Y-m-d 23:59:59', strtotime($request['payment_date_from'])));
         }
         if (!empty($request['payment_date_to'])) {
-            $revenue->whereDate('payment_completed', '<=', date('Y-m-d 11:59:59', strtotime($request['payment_date_to'])));
+            $revenue->whereDate('payment_completed', '<=', date('Y-m-d 23:59:59', strtotime($request['payment_date_to'])));
         }
         if (!empty($request['position'])) {
             $revenue->where('ad_position_id', $request['position']);

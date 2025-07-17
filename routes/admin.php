@@ -43,8 +43,9 @@ Route::controller(AgentController::class)->prefix('agent')->as('agent.')->group(
 });
 
 Route::controller(SubscriptionController::class)->prefix('subscription')->as('subscription.')->group(function () {
-    Route::get('/', 'index')->name('index');
+    Route::get('/plans', 'index')->name('index');
     Route::post('/save', 'save')->name('save');
+    Route::get('/history', 'history')->name('history');
 });
 
 Route::controller(AdsController::class)->prefix('ads')->as('ads.')->group(function () {

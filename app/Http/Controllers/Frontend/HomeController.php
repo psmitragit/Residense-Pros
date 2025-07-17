@@ -194,7 +194,7 @@ class HomeController extends Controller
     public function propertyDetails($slug)
     {
         $title = 'Property Details';
-        $property = Property::where('slug', $slug)->firstOrFail();
+        $property = Property::where('slug', $slug)->where('status', 'published')->firstOrFail();
         $updateCountUrl = route('update.property.count', ['id' => $property?->id ?? 0]);
         $amenities = Amenity::all();
         $propertyAmenity = PropertyAmenity::where('property_id', $property?->id ?? '')->get()->pluck('amenities_id')->toArray();
