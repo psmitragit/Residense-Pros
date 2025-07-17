@@ -8,9 +8,7 @@ use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Stripe\Subscription;
 
-use function PHPUnit\Framework\isNan;
 
 class SubscriptionController extends Controller
 {
