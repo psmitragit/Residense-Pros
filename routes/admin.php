@@ -49,6 +49,7 @@ Route::controller(SubscriptionController::class)->prefix('subscription')->as('su
 
 Route::controller(AdsController::class)->prefix('ads')->as('ads.')->group(function () {
     Route::get('/position', 'position')->name('position');
+    Route::get('/all', 'all')->name('all');
     Route::get('/revenue', 'revenue')->name('revenue');
     Route::get('/pending', 'pending')->name('pending');
     Route::get('/pending/{id}', 'pending')->name('pending.details');

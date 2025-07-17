@@ -291,7 +291,8 @@ header {
 }
 
 .nav-item.dropdown .dropdown-menu {
-  min-width: 100%;
+  /* min-width: 100%; ADVICE BY DEVELOPER*/
+  min-width: 212px;
   width: 100%;
   left: 0;
   right: auto;

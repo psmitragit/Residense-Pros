@@ -111,4 +111,8 @@ class Property extends Model
     {
         return $this->hasMany(PropertyNearbyPlace::class, 'property_id', 'id');
     }
+
+    public function getTotalViewsAttribute(){
+        return PropertyView::where('property_id', $this->id)->count();
+    }
 }

@@ -87,6 +87,13 @@
                             </li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
+                                    href="{{ route('user.change.password') }}">
+                                    <i class="fas fa-lock text-primary" style="font-size: 0.85rem;"></i>
+                                    <span>Change Password</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 px-3 py-2"
                                     href="{{ route('user.fevorites') }}">
                                     <i class="fa-solid fa-heart text-primary" style="font-size: 0.85rem;"></i>
                                     <span>My Fevorites</span>

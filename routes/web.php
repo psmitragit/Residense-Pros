@@ -58,6 +58,8 @@ Route::middleware(CheckUserLoggedInMiddleware::class)->group(function () {
     Route::get('/fevorites', [HomeController::class, 'fevorites'])->name('user.fevorites');
     Route::get('/edit-profile', [HomeController::class, 'editProfile'])->name('user.edit.profile');
     Route::post('/do-edit-profile', [HomeController::class, 'doEditProfile'])->name('do.edit-profile');
+    Route::get('/change-password', [HomeController::class, 'changePassword'])->name('user.change.password');
+    Route::post('/do-changhe-password', [HomeController::class, 'doChangePassword'])->name('do.change.password');
 });
 
 Route::controller(SubscriptionController::class)->group(function () {

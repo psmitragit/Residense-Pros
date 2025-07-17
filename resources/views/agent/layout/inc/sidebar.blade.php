@@ -59,6 +59,12 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item {{ request()->route()->getName() == 'agent.enquiry.index' ? 'active' : '' }}">
+                    <a href="{{ route('agent.enquiry.index') }}">
+                        <i class="fas fa-question-circle"></i>
+                        <p>Enquiry</p>
+                    </a>
+                </li>
                 <li
                 class="nav-item {{ request()->is('agent/ads*') ? 'active' : '' }}">
                 <a data-bs-toggle="collapse" href="#adsMenu">

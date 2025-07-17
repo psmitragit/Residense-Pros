@@ -12,6 +12,7 @@
             <thead>
                 <tr>
                     <th style="width: 20%;">Name</th>
+                    <th style="width: 10%;" class="text-center">Views</th>
                     <th style="width: 10%;">Type</th>
                     <th style="width: 20%;">Price</th>
                     <th style="width: 30%;">Address</th>
@@ -23,6 +24,9 @@
                     <tr>
                         <td>
                             {{ $item->name ?? '-' }}
+                        </td>
+                        <td class="text-center">
+                            {{ $item->total_views ?? '-' }}
                         </td>
                         <td>
                             {{ empty($item->property_type) ? '-' : ucfirst($item->property_type) }}

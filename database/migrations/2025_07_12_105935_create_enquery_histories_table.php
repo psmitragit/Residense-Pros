@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('message')->nullable();
             $table->string('enquery_to')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignId('property_id')->nullable()->constrained('properties')->cascadeOnUpdate()->nullOnDelete();
             $table->enum('type', ['enquery', 'contact'])->default('enquery');
             $table->timestamps();
         });

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Agent\AdsController;
 use App\Http\Controllers\Agent\DashboardController;
+use App\Http\Controllers\Agent\EnquiryController;
 use App\Http\Controllers\Agent\PropertyController;
 use App\Http\Controllers\Agent\SubscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,9 @@ Route::controller(AdsController::class)->prefix('ads')->as('ads.')->group(functi
 });
 
 Route::controller(SubscriptionController::class)->as('subscription.')->prefix('my-subscriptions')->group(function(){
+    Route::get('/', 'index')->name('index');
+});
+
+Route::controller(EnquiryController::class)->as('enquiry.')->prefix('enquiry')->group(function(){
     Route::get('/', 'index')->name('index');
 });

@@ -17,7 +17,7 @@
                     <th style="width: 20%;">Subscription Name</th>
                     <th style="width: 15%;">Amount</th>
                     <th style="width: 15%;">Limit</th>
-                    <th style="width: 30%;" class="text-center">Date</th>
+                    <th style="width: 30%;" class="text-center">Start Date</th>
                 </tr>
             </thead>
             <tbody>

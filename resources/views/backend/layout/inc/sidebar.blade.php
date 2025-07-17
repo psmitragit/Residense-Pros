@@ -92,14 +92,19 @@
                     </a>
                     <div class="collapse {{ request()->is('admin/ads*') ? 'show' : '' }}" id="adsMenu">
                         <ul class="nav nav-collapse">
-                            <li class="{{ request()->is('admin/ads/position') ? 'active' : '' }}">
-                                <a href="{{ route('admin.ads.position') }}">
-                                    <span class="sub-item">Positions</span>
+                            <li class="{{ request()->is('admin/ads/all') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ads.all') }}">
+                                    <span class="sub-item">All Ads</span>
                                 </a>
-                            </li>
+                            </li>                            
                             <li class="{{ request()->is('admin/ads/revenue') ? 'active' : '' }}">
                                 <a href="{{ route('admin.ads.revenue') }}">
                                     <span class="sub-item">Revenue</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('admin/ads/position') ? 'active' : '' }}">
+                                <a href="{{ route('admin.ads.position') }}">
+                                    <span class="sub-item">Positions</span>
                                 </a>
                             </li>
                             <li class="{{ request()->is('admin/ads/pending') ? 'active' : '' }}">

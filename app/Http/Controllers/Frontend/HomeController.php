@@ -17,6 +17,7 @@ use App\Models\UserFevorit;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Psr\Http\Message\ResponseInterface;
@@ -241,6 +242,7 @@ class HomeController extends Controller
                     'message' => $request->message,
                     'enquery_to' => $userEmail,
                     'user_id' => $userId,
+                    'property_id' => $request->property_id,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]
@@ -380,5 +382,29 @@ class HomeController extends Controller
         $user->country_id = $request->country_id;
         $user->save();
         return response()->json(['success' => 1, 'msg' => 'Profile edited successfully.']);
+    }
+
+    public function changePassword()
+    {
+        return view('frontend.home.change-password');
+    }
+    public function doChangePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => ['required', 'min:8'],
+            'confirm_password' => ['required', 'same:password'],
+        ]);
+        if ($validator->fails()) {
+            $errors = [];
+            foreach ($validator->errors()->keys() as $fieldKey) {
+                $errors[$fieldKey] = $validator->errors()->first($fieldKey);
+            }
+            return response()->json(['success' => 0, 'errors' => $errors]);
+        }
+        $user = auth()->user();
+        $user->password = Hash::make($request->password);
+        $user->save();
+        session()->put('success', 'Password changed successfully.');
+        return response()->json(['success' => 1]);
     }
 }
