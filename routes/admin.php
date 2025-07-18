@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\FaqController;
 use App\Http\Controllers\Backend\PropertyController;
+use App\Http\Controllers\Backend\StaticController;
 use App\Http\Controllers\Backend\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,4 +69,10 @@ Route::controller(FaqController::class)->prefix('faq')->as('faq.')->group(functi
     Route::post('/add-edit', 'addEdit')->name('add.edit');
     Route::post('/sort', 'sort')->name('sort');
     Route::get('/get/{id}', 'get')->name('get');
+});
+
+Route::controller(StaticController::class)->as('static.')->prefix('static')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::post('/update', 'update')->name('update');
 });

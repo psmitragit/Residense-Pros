@@ -1,7 +1,7 @@
 <div class="sidebar" data-background-color="dark">
     <div class="sidebar-logo">
         <div class="logo-header" data-background-color="dark">
-            <a href="{{ route('index') }}" class="logo">
+        <a href="{{ route('index') }}" class="logo" target="_blank">
                 <img src="{{ asset('assets/frontend/images/logo.png') }}" alt="navbar" class="navbar-brand"
                     height="20">
             </a>
@@ -130,6 +130,13 @@
                             </li>
                         </ul>
                     </div>
+                </li>
+                <li
+                    class="nav-item {{ (request()?->route()?->getName() ?? '') == 'admin.static.index' ? 'active' : '' }}">
+                    <a href="{{ route('admin.static.index') }}">
+                        <i class="fas fa-file"></i>
+                        <p>Static Page</p>
+                    </a>
                 </li>
                 <li
                     class="nav-item {{ (request()?->route()?->getName() ?? '') == 'admin.faq.index' ? 'active' : '' }}">

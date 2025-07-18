@@ -10,7 +10,7 @@
     <title>{{ get_option('site_title') }}{{ empty($title) ? '' : ' | ' . $title }}</title>
     <script src="{{ asset('assets/admin/js/plugin/webfont/webfont.min.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}?v={{time()}}" />
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}?v={{ time() }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
         WebFont.load({
@@ -55,8 +55,9 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-      <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
-      <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    @stack('cdn')
     @stack('css')
 </head>
 
@@ -110,8 +111,8 @@
                 }
             });
 
-            $( ".datepicker" ).datepicker();
-            $( ".select2" ).select2();
+            $(".datepicker").datepicker();
+            $(".select2").select2();
         })
     </script>
     @include('backend.layout.inc.alert')

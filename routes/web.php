@@ -30,9 +30,6 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/faqs', 'faqs')->name('faq');
     Route::match(['get', 'post'], '/blogs', 'blogs')->name('blogs');
     Route::get('/contact-us', 'contact')->name('contact');
-    Route::get('/terms-and-condition', 'termsAndCondition')->name('terms');
-    Route::get('/privecy-policy', 'privectyPolicy')->name('privacy');
-    Route::get('/cookie-policy', 'cookiePolicy')->name('cookie.policy');
     Route::post('/do-enquiry', 'doEnquiry')->name('do.enquiry');
     Route::post('/add-remove-fev', 'addRemoveFevorit')->name('property.add-remove-fev');
     Route::post('/notify-me', 'doNotifyMe')->name('do.notify.me');
@@ -40,6 +37,9 @@ Route::controller(HomeController::class)->group(function () {
     //PROPERTIES
     Route::match(['get', 'post'], '/properties', 'properties')->name('properties');
     Route::get('/property-details/{slug}', 'propertyDetails')->name('property.details');
+    Route::get('/terms-and-condition', 'staticPage')->name('terms');
+    Route::get('/privecy-policy', 'staticPage')->name('privacy');
+    Route::get('/cookie-policy', 'staticPage')->name('cookie.policy');
 });
 
 Route::controller(BlogController::class)->as('blog.')->group(function () {

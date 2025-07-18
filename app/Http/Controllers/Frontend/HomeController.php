@@ -12,6 +12,7 @@ use App\Models\Faq;
 use App\Models\NotifyUser;
 use App\Models\Property;
 use App\Models\PropertyAmenity;
+use App\Models\StaticPage;
 use App\Models\UserFevorit;
 use Carbon\Carbon;
 use Exception;
@@ -450,7 +451,15 @@ class HomeController extends Controller
         });
 
         $sitemap->writeToFile(public_path('sitemap.xml'));
-        
+
         return redirect('sitemap.xml?v=' . time());
+    }
+
+    public function staticPage()
+    {
+        $slug = request()->path();
+        $page = StaticPage::where('slug', $slug)->firstOrFail();
+        $title = $page?->name ?? '';
+        return view('frontend.static', compact('title', 'page'));
     }
 }

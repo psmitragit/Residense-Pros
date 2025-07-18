@@ -1,4 +1,8 @@
 @extends('backend.layout.app')
+@push('cdn')
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+@endpush
 @push('css')
     <style>
         .select2-selection.select2-selection--multiple {
@@ -26,7 +30,7 @@
 
         <div class="form-group">
             <label for="content">Content <span class="text-danger">*</span></label>
-            <textarea class="form-control" id="content" name="content" rows="5">{{ $blog?->content ?? '' }}</textarea>
+            <textarea class="form-control" id="summernote" name="content" rows="5">{{ $blog?->content ?? '' }}</textarea>
             <span class="error content_error"></span>
         </div>
 
@@ -104,6 +108,12 @@
     @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // INITIALIZE SUMMERNOTE  
+            $('#summernote').summernote({
+                height: 300
+            });
+            //** INITIALIZE SUMMERNOTE  
+
             const imageInput = document.getElementById('image');
             const previewContainer = document.getElementById('image-preview-container');
             const previewImage = document.getElementById('image-preview');
@@ -120,9 +130,6 @@
                     reader.readAsDataURL(file);
                 }
             });
-
-
-
 
             $('#addBlog').on('submit', function(e) {
                 e.preventDefault();

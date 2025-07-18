@@ -149,11 +149,14 @@
             </div>
 
             <div class="header-nav flex-grow-1">
-                <li>
-                    <a href="javascript:void(0);" class="loginbtn" data-bs-toggle="modal" data-bs-target="#authModal">
-                        <i class="fa-regular fa-user"></i>
-                    </a>
-                </li>
+                @if (!auth()->check())
+                    <li>
+                        <a href="javascript:void(0);" class="loginbtn" data-bs-toggle="modal"
+                            data-bs-target="#authModal">
+                            <i class="fa-regular fa-user"></i>
+                        </a>
+                    </li>
+                @endif
                 <div id="swipe_overlay"></div>
                 <div id="swipeNav">
                     <div class="pull_nav_close text-center">
@@ -200,41 +203,15 @@
                                     class="navA {{ (request()?->route()?->getName() ?? '') == 'contact' ? 'active' : '' }}">
                                     Contact Us
                                 </a>
-                            </li>
+                            </li>                            
                             <li>
-                                @if (!auth()->check())
-                                    <a href="javascript:void(0);" class="loginbtn" data-bs-toggle="modal"
-                                        data-bs-target="#authModal">
-                                        <i class="fa-regular fa-user"></i>
-                                    </a>
-                                @elseif(auth()->user()->role == 'agent')
-                                    {{-- <div class="dropdown">
-                                        <a href="#"
-                                            class="dropdown-toggle d-flex align-items-center gap-2 loginbtn"
-                                            id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-regular fa-user"></i>
-                                            <span class="fw-medium">{{ auth()->user()->name }}</span>
-                                            <i class="fa-solid fa-caret-down"></i>
-                                        </a>
-
-                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                                            <li><a class="dropdown-item" href="#">My Account</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="{{ route('auth.logout') }}">
-                                                    Logout
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div> --}}
-                                @elseif(auth()->user()->role == 'user')
-                                    <a href="javascript:void(0);" class="loginbtn" data-bs-toggle="modal"
-                                        data-bs-target="#authModal">
-                                        <i class="fa-regular fa-user"></i>
-                                    </a>
-                                @endif
+                                Dummy
+                                <ul>
+                                    <li>1</li>
+                                    <li>1</li>
+                                    <li>1</li>
+                                    <li>1</li>
+                                </ul>
                             </li>
                             <li>
                                 @if (!auth()->check())
