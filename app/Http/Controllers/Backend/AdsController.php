@@ -223,6 +223,6 @@ class AdsController extends Controller
             $revenue->where('user_id', $request['agent']);
         }
         $revenue = $revenue->first();
-        return $format ? format_amount($revenue?->amount ?? 0) : ($revenue?->amount ?? 0);
+        return $format ? format_amount($revenue?->amount ?? 0, specialFormat: true) : ($revenue?->amount ?? 0);
     }
 }

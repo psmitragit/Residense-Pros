@@ -26,8 +26,11 @@ function log_error($txt = 'Log Error')
 }
 
 if (!function_exists('get_option')) {
-    function get_option(mixed $key)
+    function get_option(mixed $key = '')
     {
+        if(empty($key)){
+            return Option::pluck('value', 'key')->toArray();
+        }
         if (is_array($key)) {
             return Option::whereIn('key', $key)->pluck('value', 'key')->toArray();
         } else {

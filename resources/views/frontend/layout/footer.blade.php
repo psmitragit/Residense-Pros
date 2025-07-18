@@ -90,7 +90,7 @@
             <div class="col-lg-3 col-6">
                 <h5 class="footer-heading mb-3">Other Links</h5>
                 <ul class="list-unstyled footer-links">
-                    <li><a href="#">Sitemap</a></li>
+                    <li><a href="{{ route('sitemap') }}" target="_blank">Sitemap</a></li>
                     <li><a href="{{ route('cookie.policy') }}">Cookie Policy</a></li>
                     <li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
                     <li><a href="{{ route('terms') }}">Terms & Conditions</a></li>
@@ -101,7 +101,9 @@
                 $social = get_option(['facebook', 'instagram', 'linkedin']);
             @endphp
             <div class="col-lg-2 col-6">
-                <h5 class="footer-heading mb-3">Follow Us</h5>
+                @if (!empty($social['facebook']) || !empty($social['instagram']) || !empty($social['linkedin']))
+                    <h5 class="footer-heading mb-3">Follow Us</h5>
+                @endif
                 <ul class="list-unstyled footer-social">
                     @if (!empty($social['facebook']))
                         <li class="mb-3">

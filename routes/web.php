@@ -72,5 +72,4 @@ Route::get('update-property-count/{id}', function ($id) {
     return updatePropertyCount($id);
 })->name('update.property.count');
 
-
-// Route:: 
+Route::get('/sitemap', [HomeController::class, 'sitemap'])->name('sitemap');

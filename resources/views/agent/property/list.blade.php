@@ -76,6 +76,9 @@
             @endforelse
         </tbody>
     </table>
+    @if ($properties->lastPage() > 1)
+        @include('backend.layout.inc.paginate', ['item' => $properties])
+    @endif
 </div>
 @endsection
 

@@ -148,6 +148,6 @@ class SubscriptionController extends Controller
             $revenue->whereDate('payment_completed', '<=',  date('Y-m-d 23:59:59', strtotime($filter['end_date'])));
         }
         $revenue = $revenue->first();
-        return $format ? format_amount($revenue?->amount ?? 0) : $revenue?->amount ?? 0;
+        return $format ? format_amount($revenue?->amount ?? 0, specialFormat: true) : $revenue?->amount ?? 0;
     }
 }

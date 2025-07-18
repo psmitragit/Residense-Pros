@@ -17,7 +17,7 @@ class PropertyController extends Controller
             ]
         ];
         $keyword = request()->keyword ?? '';
-        $properties = Property::whereIn('status', ['published'])->orderBy('published_at', 'DESC');
+        $properties = Property::whereIn('status', ['published'])->where('archive',  '0')->orderBy('published_at', 'DESC');
         if(!blank($keyword)){
             $properties->where('name', 'like', '%'.$keyword.'%');
         }

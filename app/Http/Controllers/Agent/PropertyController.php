@@ -65,18 +65,21 @@ class PropertyController extends Controller
         return view('agent.property.list', compact('title', 'links', 'properties', 'type', 'showAdd', 'btnAction'));
     }
 
-    public function getProperty($status)
+    public function getProperty($status, $paginate = true)
     {
-        return Property::where('created_by', auth()->id())->where('archive', 0)->where('status', $status)->get();
+        $properties = Property::where('created_by', auth()->id())->where('archive', 0)->where('status', $status);
+        return $paginate ? $properties->paginate(get_option('admin_perpage')) : $properties->get();
     }
 
-    public function archiveProperty($id){
+    public function archiveProperty($id)
+    {
         $property = Property::where('created_by', auth()->id())->where('id', $id)->where('archive', 0)->firstOrFail();
         $property->archive = 1;
         $property->save();
         return redirect()->back()->with('success', 'Property archived successfully.');
     }
-    public function unarchiveProperty($id){
+    public function unarchiveProperty($id)
+    {
         $property = Property::where('created_by', auth()->id())->where('id', $id)->where('archive', 1)->firstOrFail();
         $property->archive = 0;
         $property->save();

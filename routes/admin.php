@@ -14,6 +14,8 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/edit-profile', 'editProfile')->name('edit.profile');
     Route::post('/do-edit-profile', 'doEditProfile')->name('profile.do-edit');
+    Route::get('/settings', 'settings')->name('settings.index');
+    Route::post('/update-settings', 'updateSettings')->name('update.settings');
 });
 
 Route::controller(BlogController::class)->prefix('blogs')->as('blog.')->group(function () {

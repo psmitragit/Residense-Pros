@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Mail\SendFormattedMail;
 use App\Models\Amenity;
 use App\Models\Blog;
-use App\Models\BlogCategory;
 use App\Models\Category;
 use App\Models\EnqueryHistory;
 use App\Models\Faq;
@@ -20,7 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Psr\Http\Message\ResponseInterface;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 
 class HomeController extends Controller
 {
@@ -406,5 +406,51 @@ class HomeController extends Controller
         $user->save();
         session()->put('success', 'Password changed successfully.');
         return response()->json(['success' => 1]);
+    }
+
+    public function sitemap()
+    {
+        $sitemap = Sitemap::create();
+
+        // Static Pages
+        $staticPages = [
+            '/' => 1.0,
+            '/about' => 1.0,
+            '/properties' => 1.0,
+            '/faqs' => 1.0,
+            '/blogs' => 1.0,
+            '/contact-us' => 1.0,
+            '/fevorites' => 1.0,
+        ];
+
+        foreach ($staticPages as $url => $priority) {
+            $sitemap->add(
+                Url::create($url)
+                    ->setPriority($priority)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_NEVER)
+            );
+        }
+
+        Property::where('status', 'published')->get()->each(function (Property $property) use ($sitemap) {
+            $sitemap->add(
+                Url::create("/property-details/{$property->slug}")
+                    ->setPriority(0.9)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                    ->setLastModificationDate($property->updated_at ?? now())
+            );
+        });
+
+        Blog::where('status', '1')->get()->each(function (Blog $blog) use ($sitemap) {
+            $sitemap->add(
+                Url::create("/blog/{$blog->slug}")
+                    ->setPriority(0.9)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                    ->setLastModificationDate($blog->updated_at ?? now())
+            );
+        });
+
+        $sitemap->writeToFile(public_path('sitemap.xml'));
+        
+        return redirect('sitemap.xml?v=' . time());
     }
 }
