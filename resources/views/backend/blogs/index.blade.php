@@ -1,6 +1,57 @@
 @extends('backend.layout.app')
 
 @section('content')
+    <div class="container filter-wrapper">
+        <form action="" method="GET" class="row g-3 align-items-end" autocomplete="off">
+            <div class="col-md-2">
+                <label for="keyword" class="form-label">Keyword</label>
+                <input type="text" class="form-control" value="{{ request()->keyword ?? '' }}" name="keyword">
+            </div>
+            <div class="col-md-2">
+                <label for="author" class="form-label">Author</label>
+                <select class="form-select" name="author" id="author">
+                    <option value="">All</option>
+                    @foreach ($authors as $item)
+                        <option value="{{ $item }}" {{ $selectedAuthor == $item ? 'selected' : '' }}>
+                            {{ $item }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" name="category" id="category">
+                    <option value="">All</option>
+                    @foreach ($categories as $item)
+                        <option value="{{ $item->id }}" {{ $selectedCategory == $item->id ? 'selected' : '' }}>
+                            {{ $item->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="date_from" class="form-label">Date From</label>
+                <input type="date" name="date_from" id="date_from" class="form-control"
+                    value="{{ request()->date_from ?? '' }}">
+            </div>
+            <div class="col-md-2">
+                <label for="date_to" class="form-label">Date To</label>
+                <input type="date" name="date_to" id="date_to" class="form-control"
+                    value="{{ request()->date_to ?? '' }}">
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                @if (
+                    !empty(request()->author) ||
+                        !empty(request()->category) ||
+                        !empty(request()->keyword) ||
+                        !empty(request()->date_from) ||
+                        !empty(request()->date_to))
+                    <a href="{{ route('admin.blog.index') }}" class="btn btn-danger">Clear</a>
+                @endif
+            </div>
+        </form>
+    </div>
     <div class="d-flex my-3">
         <a href="{{ route('admin.blog.add') }}" class="btn btn-secondary">Add</a>
     </div>
@@ -32,8 +83,9 @@
                         <td style="width: 20%;">
                             {{ format_date($item->published_at) }}
                         </td>
-                        <td class="d-flex gap-2 justify-content-center align-items-center">
-                            <a href="{{ route('admin.blog.edit', ['id' => $item->id]) }}" class="btn btn-success px-3 py-1">
+                        <td class="d-flex gap-2 justify-content-center align-items-center border-0">
+                            <a href="{{ route('admin.blog.edit', ['id' => $item->id]) }}"
+                                class="btn btn-success px-3 py-1">
                                 Edit
                             </a>
                             <button data-url="{{ route('admin.blog.delete', ['id' => $item->id]) }}"
@@ -49,6 +101,9 @@
                 @endforelse
             </tbody>
         </table>
+        @if ($blogs->lastPage() > 1)
+            @include('backend.layout.inc.paginate', ['item' => $blogs])
+        @endif
     </div>
 @endsection
 

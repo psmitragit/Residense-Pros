@@ -2,7 +2,7 @@
     <div class="sidebar-logo">
         <div class="logo-header" data-background-color="dark">
             <a href="{{ route('admin.index') }}" class="logo">
-                <img src="{{ asset('assets/admin/img/kaiadmin/logo_light.svg') }}" alt="navbar" class="navbar-brand"
+                <img src="{{ asset('assets/frontend/images/logo.png') }}" alt="navbar" class="navbar-brand"
                     height="20">
             </a>
             <div class="nav-toggle">
