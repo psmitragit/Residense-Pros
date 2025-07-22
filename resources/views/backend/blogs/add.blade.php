@@ -147,8 +147,7 @@
                     success: function(res) {
                         if (res.success == 0) {
                             if (res.errors) {
-                                showValidationError(res
-                                    .errors);
+                                showValidationError(res.errors);
                             } else {
                                 Swal.fire({
                                     text: '',
