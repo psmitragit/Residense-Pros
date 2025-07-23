@@ -115,4 +115,12 @@ class Property extends Model
     public function getTotalViewsAttribute(){
         return PropertyView::where('property_id', $this->id)->count();
     }
+
+    public function price(){
+        $price = format_amount($this->price, 2, $this->country?->currency_symbol ?? '$', true);
+        if($this->property_type == 'rent'){
+            $price .= '/'. $this->price_type;
+        }
+        return $price;
+    }
 }

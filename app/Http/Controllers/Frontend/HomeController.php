@@ -62,6 +62,56 @@ class HomeController extends Controller
         return view('frontend.home.index', compact('group', 'blogs', 'homepage_title', 'homepage_description', 'filter'));
     }
 
+    public function propertiesMap(Request $request)
+    {
+        $country = $request->country ?? '';
+        $leftProperties = Property::where('lat', '!=', '')->where('lng', '!=', '')->where('country_id', $country)->where('status', 'published')->inRandomOrder()->limit(4)->get();
+        $properties = Property::where('lat', '!=', '')->where('lng', '!=', '')->where('country_id', $country)->where('status', 'published')->get();
+        $propertyMap = [];
+        foreach ($properties as $key => $value) {
+            $propertyMap[] = [
+                'id' => $value->id ?? '',
+                'name' => $value->name ?? '',
+                'lat' => trim($value->lat) ?? '',
+                'lng' => trim($value->lng) ?? '',
+                'type' => ucfirst($value->property_type),
+                'price' => $value?->price() ?? '',
+                'address' => $value->full_address ?? '',
+                'image' => $value?->getFeaturedImage() ?? '',
+                'country' => $value?->country_id
+            ];
+        }
+        return response()->json(['success' => 1, 'data' => ['html' => view('frontend.home.inc.map', ['properties' => $leftProperties, 'country' => $country])->render(), 'properties' => $propertyMap]]);
+    }
+
+    public function closestProperties(Request $request)
+    {
+        $id = $request->id ?? '';
+        $firstProperty = Property::find($id);
+        if (!$firstProperty) {
+            return response()->json(['succes' => 1, 'data' => ['html' => view('frontend.home.inc.map_property_list', ['properties' => []])->render()]]);
+        }
+        $lat = $firstProperty->lat;
+        $lng = $firstProperty->lng;
+        $radius = 30;
+
+        $properties = Property::selectRaw("*,
+        (6371 * acos(
+            cos(radians(?)) *
+            cos(radians(lat)) *
+            cos(radians(lng) - radians(?)) +
+            sin(radians(?)) *
+            sin(radians(lat))
+        )) AS distance", [$lat, $lng, $lat])
+            ->where('id', '!=', $id)
+            ->having('distance', '<=', $radius)
+            ->orderBy('distance', 'asc')
+            ->get();
+        $properties->prepend($firstProperty);
+
+        return response()->json(['success' => 1, 'data' => ['html' => view('frontend.home.inc.map_property_list', ['properties' => $properties])->render()]]);
+    }
+
     public function about()
     {
         $title = 'About Us';

@@ -46,9 +46,14 @@
                             </div>
 
                             <div class="custom-toggle-container">
-                                <div class="toggle-highlight"></div>
-                                <button type="button" class="toggle-button active" id="listBtn">List</button>
-                                <button type="button" class="toggle-button" id="mapBtn">Map</button>
+                                <div class="toggle-highlight toggle-highlight_{{ $key }}"></div>
+                                <button type="button" class="toggle-button active listBtn"
+                                    data-country="{{ $key }}">
+                                    List
+                                </button>
+                                <button type="button" class="toggle-button mapBtn" data-country="{{ $key }}">
+                                    Map
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -69,6 +74,7 @@
 @endsection
 
 @push('js')
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('MAP_API_KEY') }}"></script>
     <script>
         window.addEventListener('DOMContentLoaded', function() {
             $('.featured_poperty_wrapper').on('click', '.custom-pagination a', function(e) {
@@ -169,6 +175,162 @@
                     icon.removeClass('heart-animate');
                 }, 600);
             }
+
+            $('.listBtn').on('click', function() {
+                let country = $(this).data('country');
+                $(this).addClass('active');
+                $('.mapBtn[data-country="' + country + '"]').removeClass('active');
+                let highlight = $('.toggle-highlight_' + country);
+                highlight.css('transform', 'translateX(0)');
+                let url = "{{ route('properties') }}";
+                updateProperty(url, country);
+
+            });
+
+            $('.mapBtn').on('click', function() {
+                let country = $(this).data('country');
+                $(this).addClass('active');
+                $('.listBtn[data-country="' + country + '"]').removeClass('active');
+                let highlight = $('.toggle-highlight_' + country);
+                highlight.css('transform', 'translateX(100%)');
+                showMap(country);
+            });
+
+            function showMap(country) {
+                let data = {
+                    country: country
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('property.map') }}",
+                    data: data,
+                    success: function(res) {
+                        if (res.success == 0) {
+                            showToast('', res.msg, 'error');
+                        } else {
+                            $(`#featured_property_${country}`).html(res.data.html);
+                            initializeMap(country, res.data.properties);
+                            setTimeout(() => {
+                                $('html, body').animate({
+                                    scrollTop: $(
+                                            `#featured_property_${country}`)
+                                        .offset().top - 200
+                                }, 500);
+                            }, 1);
+                        }
+                    },
+                    beforeSend: function() {
+                        $(`#featured_property_list_${country} .loader-wrapper`).removeClass(
+                            'd-none');
+                    },
+                    complete: function() {
+                        $(`#featured_property_list_${country} .loader-wrapper`).addClass(
+                            'd-none');
+                    }
+                });
+            }
+
+            function initializeMap(country, properties) {
+                $(`#map_${country}`).empty();
+
+                const center = properties.length > 0 ? {
+                    lat: parseFloat(properties[0].lat),
+                    lng: parseFloat(properties[0].lng)
+                } : {
+                    lat: 36.1699,
+                    lng: -115.1398
+                };
+
+                const map = new google.maps.Map(document.getElementById(`map_${country}`), {
+                    zoom: 2,
+                    center: center
+                });
+
+                const infoWindow = new google.maps.InfoWindow();
+                let activeCircle = null;
+
+                properties.forEach(property => {
+                    if (property.lat && property.lng) {
+                        const lat = parseFloat(property.lat);
+                        const lng = parseFloat(property.lng);
+
+                        if (isNaN(lat) || isNaN(lng)) {
+                            console.warn(`Invalid lat/lng for property ID ${property.id}`);
+                            return;
+                        }
+
+                        const marker = new google.maps.Marker({
+                            position: {
+                                lat: lat,
+                                lng: lng
+                            },
+                            map: map,
+                            title: property.name ?? 'Property',
+                        });
+
+                        marker.addListener('click', function() {
+                            $.ajax({
+                                url: "{{ route('property.closest') }}",
+                                type: 'POST',
+                                data: {
+                                    id: property.id
+                                },
+                                success: function(res) {
+                                    $(`#map_property_list_${property.country}`).html(res.data.html);
+                                }
+                            });
+
+                            if (activeCircle) {
+                                activeCircle.setMap(null);
+                            }
+
+                            activeCircle = new google.maps.Circle({
+                                strokeColor: "#FF0000",
+                                strokeOpacity: 0.8,
+                                strokeWeight: 2,
+                                fillColor: "#FF0000",
+                                fillOpacity: 0.2,
+                                map: map,
+                                center: {
+                                    lat: lat,
+                                    lng: lng
+                                },
+                                radius: 30000
+                            });
+
+                            map.setZoom(9)
+
+                            const html = `
+                                <div style="max-width: 250px; font-family: Arial, sans-serif;">
+                                    <img src="${property.image ?? 'https://via.placeholder.com/250x150?text=No+Image'}" alt="${property.name ?? 'Property'}" style="width: auto; height: 100px; margin-bottom: 10px; border-radius: 4px;" />
+                                    <h4 style="margin: 0 0 10px; color: #333;">${property.name ?? 'Unnamed Property'}</h4>
+                                    <p style="margin: 0;">
+                                        <strong>Price:</strong> ${property.price ?? 'N/A'}<br>
+                                        <strong>Buy/Rent:</strong> ${property.type ?? 'N/A'}<br>
+                                        <strong>Address:</strong> ${property.address ?? 'N/A'}<br>
+                                    </p>
+                                </div>
+                            `;
+
+                            infoWindow.setContent(html);
+                            infoWindow.open(map, marker);
+                        });
+                    }
+                });
+
+                // Animated Zoom
+                let currentZoom = 2;
+                const targetZoom = 8;
+                const zoomInterval = setInterval(() => {
+                    if (currentZoom >= targetZoom) {
+                        clearInterval(zoomInterval);
+                    } else {
+                        currentZoom++;
+                        map.setZoom(currentZoom);
+                    }
+                }, 100);
+            }
+
         });
     </script>
 @endpush

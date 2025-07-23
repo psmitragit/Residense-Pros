@@ -281,51 +281,6 @@ $(function () {
 })
 
 
-// Toggle list or map view
-
-document.addEventListener("DOMContentLoaded", function () {
-  const listBtn = document.getElementById("listBtn");
-  const mapBtn = document.getElementById("mapBtn");
-  const highlight = document.querySelector(".toggle-highlight");
-
-  // Set initial highlight position
-  if (mapBtn) {
-    if (mapBtn.classList.contains("active")) {
-      highlight.style.transform = "translateX(100%)";
-    } else {
-      highlight.style.transform = "translateX(0)";
-    }
-  }
-
-  function activateToggle(activeBtn, inactiveBtn, moveRight, redirectURL) {
-
-    if (activeBtn.classList.contains("active") || window.location.pathname.includes(redirectURL)) {
-      return;
-    }
-
-    inactiveBtn.classList.remove("active");
-    activeBtn.classList.add("active");
-    highlight.style.transform = moveRight ? "translateX(100%)" : "translateX(0)";
-
-    setTimeout(() => {
-      window.location.href = redirectURL;
-    }, 500);
-  }
-
-  if (listBtn) {
-    listBtn.addEventListener("click", () => {
-      activateToggle(listBtn, mapBtn, false, "properties-list.html");
-    });
-  }
-
-  if (mapBtn && listBtn) {
-    mapBtn.addEventListener("click", () => {
-      activateToggle(mapBtn, listBtn, true, "properties-map.html");
-    });
-  }
-});
-
-
 // Prop details gallery
 
 $(document).ready(function () {

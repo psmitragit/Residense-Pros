@@ -36,6 +36,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::post('/do-contact', 'doContact')->name('do.contact');
     //PROPERTIES
     Route::match(['get', 'post'], '/properties', 'properties')->name('properties');
+    Route::post('/properties/map', 'propertiesMap')->name('property.map');
+    Route::post('/properties/get-closest-properties', 'closestProperties')->name('property.closest');
     Route::get('/property-details/{slug}', 'propertyDetails')->name('property.details');
     Route::get('/terms-and-condition', 'staticPage')->name('terms');
     Route::get('/privecy-policy', 'staticPage')->name('privacy');
